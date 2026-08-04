@@ -1,0 +1,145 @@
+[
+  {
+    "id": "chongqing",
+    "name": "CCPC 重庆",
+    "org": "CCPC",
+    "city": "重庆",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "不渡轮回",
+      "solved": 10,
+      "penalty": 1186
+    }
+  },
+  {
+    "id": "haerbin",
+    "name": "CCPC 哈尔滨",
+    "org": "CCPC",
+    "city": "哈尔滨",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "呆呆鸟",
+      "solved": 11,
+      "penalty": 1189
+    }
+  },
+  {
+    "id": "jinan",
+    "name": "CCPC 济南",
+    "org": "CCPC",
+    "city": "济南",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "一步之遥",
+      "solved": 9,
+      "penalty": 1209
+    }
+  },
+  {
+    "id": "zhengzhou",
+    "name": "CCPC 郑州",
+    "org": "CCPC",
+    "city": "郑州",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "飞带不长队",
+      "solved": 10,
+      "penalty": 1188
+    }
+  },
+  {
+    "id": "hangzhou",
+    "name": "EC-Final 杭州",
+    "org": "EC-Final",
+    "city": "杭州",
+    "teams": 0,
+    "champion": {
+      "school": "清华大学",
+      "team": "零基础新生 1 队",
+      "solved": 9,
+      "penalty": 1091
+    }
+  },
+  {
+    "id": "chengdu",
+    "name": "ICPC 成都",
+    "org": "ICPC",
+    "city": "成都",
+    "teams": 0,
+    "champion": {
+      "school": "清华大学",
+      "team": "零基础新生 1 队",
+      "solved": 11,
+      "penalty": 983
+    }
+  },
+  {
+    "id": "nanjing",
+    "name": "ICPC 南京",
+    "org": "ICPC",
+    "city": "南京",
+    "teams": 0,
+    "champion": {
+      "school": "清华大学",
+      "team": "零基础新生 1 队",
+      "solved": 12,
+      "penalty": 1260
+    }
+  },
+  {
+    "id": "shanghai",
+    "name": "ICPC 上海",
+    "org": "ICPC",
+    "city": "上海",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "一步之遥",
+      "solved": 12,
+      "penalty": 1457
+    }
+  },
+  {
+    "id": "shenyang",
+    "name": "ICPC 沈阳",
+    "org": "ICPC",
+    "city": "沈阳",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "不渡轮回",
+      "solved": 12,
+      "penalty": 1535
+    }
+  },
+  {
+    "id": "wuhan",
+    "name": "ICPC 武汉",
+    "org": "ICPC",
+    "city": "武汉",
+    "teams": 0,
+    "champion": {
+      "school": "北京大学",
+      "team": "一步之遥",
+      "solved": 10,
+      "penalty": 1145
+    }
+  },
+  {
+    "id": "xian",
+    "name": "ICPC 西安",
+    "org": "ICPC",
+    "city": "西安",
+    "teams": 0,
+    "champion": {
+      "school": "上海交通大学",
+      "team": "夏日影",
+      "solved": 10,
+      "penalty": 1019
+    }
+  }
+]
