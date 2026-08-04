@@ -39,7 +39,7 @@ const rowMedalClass = ({ row }) => {
           {{ row.school }}
         </span>
         <el-tag v-if="tags.set985.has(row.school)" size="small" type="danger" class="ml-1">985</el-tag>
-        <el-tag v-if="tags.set211.has(row.school)" size="small" type="warning" class="ml-1">211</el-tag>
+        <el-tag v-else-if="tags.set211.has(row.school)" size="small" type="warning" class="ml-1">211</el-tag>
       </template>
     </el-table-column>
 

@@ -34,8 +34,8 @@ const currentTeams = computed(() => {
   if (filterSchoolType.value) {
     const { set985, set211 } = schoolTags.value
     if (filterSchoolType.value === '985') teams = teams.filter(t => set985.has(t.school))
-    else if (filterSchoolType.value === '211') teams = teams.filter(t => set211.has(t.school))
-    else if (filterSchoolType.value === 'other') teams = teams.filter(t => !set211.has(t.school))
+    else if (filterSchoolType.value === '211') teams = teams.filter(t => set211.has(t.school) && !set985.has(t.school))
+    else if (filterSchoolType.value === 'other') teams = teams.filter(t => !set211.has(t.school) && !set985.has(t.school))
   }
   if (filterOiCount.value !== '') {
     const n = Number(filterOiCount.value)
