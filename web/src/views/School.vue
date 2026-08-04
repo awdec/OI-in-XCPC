@@ -59,8 +59,6 @@ watch(() => route.params.name, loadData)
       <RankTable
         :teams="allTeams"
         @team-click="(t) => { selectedTeam = t; showTeamDetail = true }"
-        @school-click="(n) => router.push(`/school/${encodeURIComponent(n)}`)"
-        @player-click="(n) => router.push(`/player/${encodeURIComponent(n)}`)"
       />
 
       <TeamDetail v-model:visible="showTeamDetail" :team="selectedTeam" :contest-name="selectedTeam?._contest" />

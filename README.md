@@ -27,14 +27,15 @@
 - **题目分析** — 各题通过率热力图
 - **选手搜索** — 跨赛区搜索选手参赛记录
 - **跨赛区对比** — 选择多个赛区横向对比（队伍数、平均解题数等图表）
+- **新标签页打开** — 所有导航链接支持 Ctrl+点击 / 鼠标中键在新标签页打开
 
 ## 技术栈
 
 - Vue 3 + Vite
 - Element Plus（UI 组件）
 - ECharts（图表可视化）
-- Vue Router 4（路由）
-- Tailwind CSS（样式）
+- Vue Router 4（路由，Hash 模式）
+- Tailwind CSS 4（样式）
 
 ## 快速开始
 
@@ -44,7 +45,9 @@
 
 ```bash
 pip install openpyxl pandas
-python scripts/convert_xlsx.py
+python scripts/convert_xlsx.py         # 主脚本：xlsx → 赛区 JSON
+python scripts/extract_players.py      # 提取选手列表
+python scripts/extract_oi_records.py   # 匹配 OI 记录（需要 raw.txt）
 ```
 
 输出到 `web/public/data/` 目录。
@@ -72,30 +75,38 @@ npm run build
 
 ```
 ├── scripts/
-│   └── convert_xlsx.py        # Python 数据预处理脚本
-├── *.xlsx                      # 11 个赛区原始成绩文件
+│   ├── convert_xlsx.py          # xlsx → JSON 主脚本
+│   ├── extract_players.py       # 提取选手列表
+│   └── extract_oi_records.py    # 匹配 OI 记录
+├── *.xlsx                        # 11 个赛区原始成绩文件
+├── raw.txt                       # OI 原始记录（~25MB）
+├── CLAUDE.md                     # Claude Code 项目指引
 ├── web/
-│   ├── public/data/            # 预处理后的 JSON 数据
-│   │   ├── contests.json       # 赛区索引
-│   │   ├── xian.json           # 各赛区详细数据
-│   │   └── ...
+│   ├── public/
+│   │   ├── data/                 # 预处理后的 JSON 数据
+│   │   │   ├── contests.json     # 赛区索引
+│   │   │   ├── xian.json         # 各赛区详细数据
+│   │   │   ├── oi_records.json   # OI 记录
+│   │   │   ├── 985.json / 211.json  # 学校标签
+│   │   │   └── ...
+│   │   └── favicon.svg           # 网站图标（紫色闪电）
 │   ├── src/
-│   │   ├── views/              # 页面
-│   │   │   ├── Home.vue        # 首页
-│   │   │   ├── Contest.vue     # 赛区详情
-│   │   │   ├── School.vue      # 学校详情
-│   │   │   ├── Player.vue      # 选手搜索
-│   │   │   └── Compare.vue     # 跨赛区对比
-│   │   ├── components/         # 组件
-│   │   │   ├── RankTable.vue   # 排名表格
-│   │   │   ├── TeamDetail.vue  # 队伍详情弹窗
-│   │   │   ├── SchoolStats.vue # 学校统计图表
+│   │   ├── views/                # 页面
+│   │   │   ├── Home.vue          # 首页
+│   │   │   ├── Contest.vue       # 赛区详情
+│   │   │   ├── School.vue        # 学校详情
+│   │   │   ├── Player.vue        # 选手详情
+│   │   │   └── Compare.vue       # 跨赛区对比
+│   │   ├── components/           # 组件
+│   │   │   ├── RankTable.vue     # 排名表格
+│   │   │   ├── TeamDetail.vue    # 队伍详情弹窗
+│   │   │   ├── SchoolStats.vue   # 学校统计图表
 │   │   │   └── ProblemHeatmap.vue # 题目热力图
 │   │   ├── utils/
-│   │   │   ├── dataLoader.js   # 数据加载
-│   │   │   └── formatters.js   # 工具函数
-│   │   ├── App.vue
-│   │   └── main.js
+│   │   │   ├── dataLoader.js     # 数据加载（带缓存）
+│   │   │   └── formatters.js     # 解析/聚合工具
+│   │   ├── App.vue               # 根组件（导航栏）
+│   │   └── main.js               # 入口（路由 + Element Plus）
 │   ├── index.html
 │   ├── vite.config.js
 │   └── package.json

@@ -6,7 +6,7 @@ const props = defineProps({
   teams: { type: Array, required: true },
 })
 
-const emit = defineEmits(['teamClick', 'schoolClick', 'playerClick'])
+const emit = defineEmits(['teamClick'])
 
 const tags = ref({ set985: new Set(), set211: new Set() })
 onMounted(async () => { tags.value = await loadSchoolTags() })
@@ -19,6 +19,9 @@ const rowMedalClass = ({ row }) => {
   if (m.includes('bronze')) return 'row-medal-bronze'
   return ''
 }
+
+const schoolPath = (name) => `/school/${encodeURIComponent(name)}`
+const playerPath = (name) => `/player/${encodeURIComponent(name)}`
 </script>
 
 <template>
@@ -35,9 +38,9 @@ const rowMedalClass = ({ row }) => {
 
     <el-table-column label="学校" min-width="160" show-overflow-tooltip>
       <template #default="{ row }">
-        <span class="text-blue-600 cursor-pointer hover:underline" @click.stop="emit('schoolClick', row.school)">
+        <router-link :to="schoolPath(row.school)" class="text-blue-600 hover:underline" @click.stop>
           {{ row.school }}
-        </span>
+        </router-link>
         <el-tag v-if="tags.set985.has(row.school)" size="small" type="danger" class="ml-1">985</el-tag>
         <el-tag v-else-if="tags.set211.has(row.school)" size="small" type="warning" class="ml-1">211</el-tag>
       </template>
@@ -62,10 +65,11 @@ const rowMedalClass = ({ row }) => {
             </div>
           </template>
           <span class="inline-flex items-center">
-            <span
-              class="text-gray-700 cursor-pointer hover:text-blue-600 hover:underline"
-              @click.stop="emit('playerClick', row.members[0].name)"
-            >{{ row.members[0].name }}</span>
+            <router-link
+              :to="playerPath(row.members[0].name)"
+              class="text-gray-700 hover:text-blue-600 hover:underline"
+              @click.stop
+            >{{ row.members[0].name }}</router-link>
             <span v-if="row.members[0].oi?.length" class="ml-0.5">☀️</span>
           </span>
         </el-tooltip>
@@ -83,10 +87,11 @@ const rowMedalClass = ({ row }) => {
             </div>
           </template>
           <span class="inline-flex items-center">
-            <span
-              class="text-gray-700 cursor-pointer hover:text-blue-600 hover:underline"
-              @click.stop="emit('playerClick', row.members[1].name)"
-            >{{ row.members[1].name }}</span>
+            <router-link
+              :to="playerPath(row.members[1].name)"
+              class="text-gray-700 hover:text-blue-600 hover:underline"
+              @click.stop
+            >{{ row.members[1].name }}</router-link>
             <span v-if="row.members[1].oi?.length" class="ml-0.5">☀️</span>
           </span>
         </el-tooltip>
@@ -104,10 +109,11 @@ const rowMedalClass = ({ row }) => {
             </div>
           </template>
           <span class="inline-flex items-center">
-            <span
-              class="text-gray-700 cursor-pointer hover:text-blue-600 hover:underline"
-              @click.stop="emit('playerClick', row.members[2].name)"
-            >{{ row.members[2].name }}</span>
+            <router-link
+              :to="playerPath(row.members[2].name)"
+              class="text-gray-700 hover:text-blue-600 hover:underline"
+              @click.stop
+            >{{ row.members[2].name }}</router-link>
             <span v-if="row.members[2].oi?.length" class="ml-0.5">☀️</span>
           </span>
         </el-tooltip>

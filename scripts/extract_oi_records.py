@@ -46,12 +46,23 @@ def parse_grade(grade_str):
     return None
 
 
-def calc_college_year_in_2025(comp_year, grade_num):
+def is_spring_competition(comp_name):
+    """判断是否为上半年比赛（WC/APIO/NOI），此时年级尚未升级。"""
+    name = comp_name.upper()
+    return name.startswith('WC') or name.startswith('APIO') or name.startswith('NOI')
+
+
+def calc_college_year_in_2025(comp_year, grade_num, comp_name=''):
     """
     根据比赛年份和年级，推算 2025H2 的大学年级。
     毕业年 = comp_year + (12 - grade_num)
     大学年级 = 2025 - 毕业年 + 1
+
+    注意：上半年比赛（WC/APIO/NOI）时年级尚未升级，
+    需要 +1 来对齐秋天的年级。
     """
+    if is_spring_competition(comp_name):
+        grade_num += 1
     grad_year = comp_year + (13 - grade_num)
     college_year = 2025 - grad_year + 1
     return college_year
@@ -85,7 +96,7 @@ def main():
                 continue
             comp_year = int(year_match.group(1))
 
-            college_year = calc_college_year_in_2025(comp_year, grade_num)
+            college_year = calc_college_year_in_2025(comp_year, grade_num, comp_name)
             if not (1 <= college_year <= 5):
                 continue
 

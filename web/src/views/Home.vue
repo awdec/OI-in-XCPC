@@ -1,9 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { loadContestsIndex } from '../utils/dataLoader'
 
-const router = useRouter()
 const contests = ref([])
 const loading = ref(true)
 
@@ -37,11 +35,11 @@ const orgTag = (org) => {
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div
+      <router-link
         v-for="c in contests"
         :key="c.id"
-        class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group"
-        @click="router.push(`/contest/${c.id}`)"
+        :to="`/contest/${c.id}`"
+        class="block bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group"
       >
         <!-- 顶部色条 -->
         <div :class="orgColor(c.org)" class="h-1.5 rounded-t-xl" />
@@ -68,7 +66,7 @@ const orgTag = (org) => {
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>

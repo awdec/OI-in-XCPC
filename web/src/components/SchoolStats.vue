@@ -11,7 +11,8 @@ use([BarChart, PieChart, GridComponent, TooltipComponent, LegendComponent, DataZ
 const props = defineProps({
   stats: { type: Array, default: () => [] },
 })
-const emit = defineEmits(['schoolClick'])
+
+const schoolPath = (name) => `/school/${encodeURIComponent(name)}`
 
 const topN = ref(20)
 const chartType = ref('bar')
@@ -80,9 +81,9 @@ const teamOption = computed(() => ({
         <el-table-column type="index" label="#" width="50" />
         <el-table-column label="学校" min-width="180">
           <template #default="{ row }">
-            <span class="text-blue-600 cursor-pointer hover:underline" @click="emit('schoolClick', row.school)">
+            <router-link :to="schoolPath(row.school)" class="text-blue-600 hover:underline">
               {{ row.school }}
-            </span>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="teams" label="队伍数" width="80" align="center" sortable />

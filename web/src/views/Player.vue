@@ -81,16 +81,16 @@ watch(() => route.params.name, loadData)
         <el-table-column type="index" label="#" width="50" />
         <el-table-column label="赛区" min-width="160">
           <template #default="{ row }">
-            <span class="text-blue-600 cursor-pointer hover:underline" @click="router.push(`/contest/${row.contestId}`)">
+            <router-link :to="`/contest/${row.contestId}`" class="text-blue-600 hover:underline">
               {{ row.contest }}
-            </span>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="学校" min-width="160">
           <template #default="{ row }">
-            <span class="text-blue-600 cursor-pointer hover:underline" @click="router.push(`/school/${encodeURIComponent(row.school)}`)">
+            <router-link :to="`/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline">
               {{ row.school }}
-            </span>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="team" label="队伍" min-width="130" />
@@ -109,6 +109,7 @@ watch(() => route.params.name, loadData)
         <el-table-column type="index" label="#" width="50" />
         <el-table-column prop="比赛" label="比赛" min-width="160" />
         <el-table-column prop="奖项" label="奖项" min-width="120" />
+        <el-table-column prop="年级" label="年级" width="80" align="center" />
         <el-table-column prop="学校" label="学校" min-width="200" />
       </el-table>
     </div>

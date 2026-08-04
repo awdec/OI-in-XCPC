@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { loadContestData, loadSchoolTags } from '../utils/dataLoader'
 import { aggregateBySchool } from '../utils/formatters'
 import RankTable from '../components/RankTable.vue'
@@ -8,7 +8,6 @@ import TeamDetail from '../components/TeamDetail.vue'
 import SchoolStats from '../components/SchoolStats.vue'
 
 const route = useRoute()
-const router = useRouter()
 
 const contest = ref(null)
 const loading = ref(true)
@@ -37,7 +36,7 @@ const currentTeams = computed(() => {
     else if (filterSchoolType.value === '211') teams = teams.filter(t => set211.has(t.school) && !set985.has(t.school))
     else if (filterSchoolType.value === 'other') teams = teams.filter(t => !set211.has(t.school) && !set985.has(t.school))
   }
-  if (filterOiCount.value !== '') {
+  if (filterOiCount.value !== '' && filterOiCount.value != null) {
     const n = Number(filterOiCount.value)
     teams = teams.filter(t => t.members.filter(m => m.oi?.length).length === n)
   }
@@ -64,9 +63,6 @@ const openTeamDetail = (team) => {
   selectedTeam.value = team
   showTeamDetail.value = true
 }
-
-const goSchool = (name) => router.push(`/school/${encodeURIComponent(name)}`)
-const goPlayer = (name) => router.push(`/player/${encodeURIComponent(name)}`)
 </script>
 
 <template>
@@ -78,7 +74,9 @@ const goPlayer = (name) => router.push(`/player/${encodeURIComponent(name)}`)
     <!-- 赛区标题 -->
     <div class="mb-6">
       <div class="flex items-center gap-3 mb-1">
-        <el-button text @click="router.push('/')">← 返回</el-button>
+        <router-link to="/">
+          <el-button text>← 返回</el-button>
+        </router-link>
         <h2 class="text-2xl font-bold text-gray-800">{{ contest.name }}</h2>
         <span
           class="text-xs font-medium px-2 py-0.5 rounded-full"
@@ -120,14 +118,12 @@ const goPlayer = (name) => router.push(`/player/${encodeURIComponent(name)}`)
       <RankTable
         :teams="currentTeams"
         @team-click="openTeamDetail"
-        @school-click="goSchool"
-        @player-click="goPlayer"
       />
     </div>
 
     <!-- 学校统计 Tab -->
     <div v-if="activeTab === 'schools'">
-      <SchoolStats :stats="schoolStats" @school-click="goSchool" />
+      <SchoolStats :stats="schoolStats" />
     </div>
 
     <!-- 队伍详情弹窗 -->
