@@ -91,24 +91,34 @@ const openTeamDetail = (team) => {
     <!-- 排名 Tab -->
     <div v-if="activeTab === 'rank'">
       <!-- 搜索 + 筛选 -->
-      <div class="flex flex-wrap items-center gap-3 mb-3">
-        <el-input v-model="searchSchool" placeholder="搜索学校" clearable class="w-40" />
-        <el-input v-model="searchTeam" placeholder="搜索队伍" clearable class="w-40" />
-        <el-input v-model="searchMember" placeholder="搜索队员" clearable class="w-40" />
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-40 shrink-0">
+          <el-input v-model="searchSchool" placeholder="搜索学校" clearable />
+        </div>
+        <div class="w-40 shrink-0">
+          <el-input v-model="searchTeam" placeholder="搜索队伍" clearable />
+        </div>
+        <div class="w-40 shrink-0">
+          <el-input v-model="searchMember" placeholder="搜索队员" clearable />
+        </div>
         <span class="text-sm text-gray-400">共 {{ currentTeams.length }} 支队伍</span>
       </div>
-      <div class="flex flex-wrap items-center gap-3 mb-4">
-        <el-select v-model="filterSchoolType" placeholder="学校类型" clearable class="w-32">
-          <el-option label="985" value="985" />
-          <el-option label="211" value="211" />
-          <el-option label="其他" value="other" />
-        </el-select>
-        <el-select v-model="filterOiCount" placeholder="OI 人数" clearable class="w-32">
-          <el-option label="0 人" :value="0" />
-          <el-option label="1 人" :value="1" />
-          <el-option label="2 人" :value="2" />
-          <el-option label="3 人" :value="3" />
-        </el-select>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-32 shrink-0">
+          <el-select v-model="filterSchoolType" placeholder="学校类型" clearable>
+            <el-option label="985" value="985" />
+            <el-option label="211" value="211" />
+            <el-option label="其他" value="other" />
+          </el-select>
+        </div>
+        <div class="w-32 shrink-0">
+          <el-select v-model="filterOiCount" placeholder="OI 人数" clearable>
+            <el-option label="0 人" :value="0" />
+            <el-option label="1 人" :value="1" />
+            <el-option label="2 人" :value="2" />
+            <el-option label="3 人" :value="3" />
+          </el-select>
+        </div>
       </div>
 
       <!-- 排名表格 -->
