@@ -74,9 +74,6 @@ const openTeamDetail = (team) => {
     <!-- 赛区标题 -->
     <div class="mb-6">
       <div class="flex items-center gap-3 mb-1">
-        <router-link to="/">
-          <el-button text>← 返回</el-button>
-        </router-link>
         <h2 class="text-2xl font-bold text-gray-800">{{ contest.name }}</h2>
         <span
           class="text-xs font-medium px-2 py-0.5 rounded-full"

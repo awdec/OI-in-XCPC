@@ -7,7 +7,8 @@ const route = useRoute()
 
 const navItems = [
   { path: '/', label: '首页', icon: '🏠' },
-  { path: '/compare', label: '跨赛区对比', icon: '📊' },
+  { path: '/announcement', label: '公告', icon: '📢' },
+  { path: '/summary', label: '全部成绩', icon: '📊' },
 ]
 </script>
 

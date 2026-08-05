@@ -62,8 +62,6 @@ watch(() => route.params.name, loadData)
 
 <template>
   <div>
-    <el-button text @click="router.back()" class="mb-4">← 返回</el-button>
-
     <div v-if="loading" class="flex justify-center py-20">
       <el-icon class="is-loading text-3xl text-blue-500"><Loading /></el-icon>
     </div>

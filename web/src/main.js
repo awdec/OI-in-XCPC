@@ -12,7 +12,8 @@ const routes = [
   { path: '/contest/:id', name: 'Contest', component: () => import('./views/Contest.vue'), props: true },
   { path: '/school/:name', name: 'School', component: () => import('./views/School.vue'), props: true },
   { path: '/player/:name', name: 'Player', component: () => import('./views/Player.vue'), props: true },
-  { path: '/compare', name: 'Compare', component: () => import('./views/Compare.vue') },
+  { path: '/summary', name: 'Summary', component: () => import('./views/Summary.vue') },
+  { path: '/announcement', name: 'Announcement', component: () => import('./views/Announcement.vue') },
 ]
 
 const router = createRouter({
