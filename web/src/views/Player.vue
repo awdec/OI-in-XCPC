@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Loading } from '@element-plus/icons-vue'
 import { loadAllContests, loadOIRecords } from '../utils/dataLoader'
 
 const props = defineProps({
@@ -18,17 +19,20 @@ const activeView = ref('icpc')
 const icpcRecords = ref([])
 const oiRecords = ref([])
 const loading = ref(true)
+let loadRequestId = 0
 
-const loadData = async (year) => {
+const loadData = async (year, name) => {
+  const requestId = ++loadRequestId
   loading.value = true
   const [contests, oi] = await Promise.all([loadAllContests(year), loadOIRecords(year)])
+  if (requestId !== loadRequestId) return
 
   // ICPC/CCPC 记录
   const results = []
   contests.forEach(c => {
     const teams = c.sheets['正式队伍'] || []
     teams.forEach(t => {
-      if (t.members.some(m => m.name === playerName.value)) {
+      if (t.members.some(m => m.name === name)) {
         results.push({
           contest: c.name,
           contestId: c.id,
@@ -45,7 +49,6 @@ const loadData = async (year) => {
   icpcRecords.value = results.sort((a, b) => (a.rank || 999) - (b.rank || 999))
 
   // OI 记录（按 name@school 的 name 部分匹配，按比赛+奖项去重）
-  const name = playerName.value
   const seen = new Set()
   const oiResults = []
   Object.entries(oi).forEach(([key, records]) => {
@@ -63,8 +66,13 @@ const loadData = async (year) => {
   loading.value = false
 }
 
-onMounted(() => loadData(props.year))
-watch(() => route.params.name, () => loadData(props.year))
+watch(
+  [() => props.year, playerName],
+  ([year, name]) => {
+    if (year && name) loadData(year, name)
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

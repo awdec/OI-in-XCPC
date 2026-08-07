@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { Loading } from '@element-plus/icons-vue'
 import { loadContestData, loadSchoolTags } from '../utils/dataLoader'
 import { aggregateBySchool } from '../utils/formatters'
 import RankTable from '../components/RankTable.vue'
@@ -131,6 +132,7 @@ const openTeamDetail = (team) => {
       <!-- 排名表格 -->
       <RankTable
         :teams="currentTeams"
+        :year="year"
         @team-click="openTeamDetail"
       />
     </div>

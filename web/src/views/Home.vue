@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { Loading } from '@element-plus/icons-vue'
 import { loadYears } from '../utils/dataLoader'
 
 const years = ref([])

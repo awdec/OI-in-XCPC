@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { Loading } from '@element-plus/icons-vue'
 import { loadAllContests, loadSchoolTags } from '../utils/dataLoader'
 import TeamDetail from '../components/TeamDetail.vue'
 

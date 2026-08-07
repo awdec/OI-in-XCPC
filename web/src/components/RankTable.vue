@@ -4,6 +4,7 @@ import { loadSchoolTags } from '../utils/dataLoader'
 
 const props = defineProps({
   teams: { type: Array, required: true },
+  year: { type: String, required: true },
 })
 
 const emit = defineEmits(['teamClick'])
@@ -20,8 +21,8 @@ const rowMedalClass = ({ row }) => {
   return ''
 }
 
-const schoolPath = (name) => `/school/${encodeURIComponent(name)}`
-const playerPath = (name) => `/player/${encodeURIComponent(name)}`
+const schoolPath = (name) => `/${props.year}/school/${encodeURIComponent(name)}`
+const playerPath = (name) => `/${props.year}/player/${encodeURIComponent(name)}`
 </script>
 
 <template>
