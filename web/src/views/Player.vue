@@ -3,6 +3,13 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { loadAllContests, loadOIRecords } from '../utils/dataLoader'
 
+const props = defineProps({
+  year: {
+    type: String,
+    required: true
+  }
+})
+
 const route = useRoute()
 const router = useRouter()
 
@@ -12,9 +19,9 @@ const icpcRecords = ref([])
 const oiRecords = ref([])
 const loading = ref(true)
 
-const loadData = async () => {
+const loadData = async (year) => {
   loading.value = true
-  const [contests, oi] = await Promise.all([loadAllContests(), loadOIRecords()])
+  const [contests, oi] = await Promise.all([loadAllContests(year), loadOIRecords(year)])
 
   // ICPC/CCPC 记录
   const results = []
@@ -56,8 +63,8 @@ const loadData = async () => {
   loading.value = false
 }
 
-onMounted(loadData)
-watch(() => route.params.name, loadData)
+onMounted(() => loadData(props.year))
+watch(() => route.params.name, () => loadData(props.year))
 </script>
 
 <template>
@@ -79,14 +86,14 @@ watch(() => route.params.name, loadData)
         <el-table-column type="index" label="#" width="50" />
         <el-table-column label="赛区" min-width="160">
           <template #default="{ row }">
-            <router-link :to="`/contest/${row.contestId}`" class="text-blue-600 hover:underline">
+            <router-link :to="`/${year}/contest/${row.contestId}`" class="text-blue-600 hover:underline">
               {{ row.contest }}
             </router-link>
           </template>
         </el-table-column>
         <el-table-column label="学校" min-width="160">
           <template #default="{ row }">
-            <router-link :to="`/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline">
+            <router-link :to="`/${year}/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline">
               {{ row.school }}
             </router-link>
           </template>

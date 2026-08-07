@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-2025 ICPC/CCPC/EC-Final contest results visualization platform for 11 Chinese regional contests. Static SPA with no backend — all data is pre-processed from xlsx files into JSON.
+ICPC/CCPC contest results visualization platform supporting multiple years (2020-2024). Static SPA with no backend — all data is pre-processed from xlsx files into JSON.
 
 ## Commands
 
@@ -18,9 +18,9 @@ npm run preview   # Preview production build
 ### Data Pipeline (run from project root)
 Requires Python 3 with `openpyxl` and `pandas`.
 ```bash
-python scripts/convert_xlsx.py         # xlsx → JSON in web/public/data/
+python scripts/convert_xlsx.py         # xlsx → JSON in web/public/data/{year}/
 python scripts/extract_players.py      # xlsx → players.json (unique school+name pairs)
-python scripts/extract_oi_records.py   # matches raw.txt OI records to players → oi_records.json
+python scripts/extract_oi_records.py   # matches raw.txt OI records to players → web/public/data/{year}/oi_records.json
 ```
 
 `convert_xlsx.py` is the main pipeline — it reads each xlsx file's "正式队伍" sheet and outputs per-contest JSON plus a `contests.json` index. Run it after adding or updating xlsx source files.
@@ -29,7 +29,14 @@ python scripts/extract_oi_records.py   # matches raw.txt OI records to players �
 
 ### Frontend (`web/src/`)
 - **Vue 3 Composition API** (`<script setup>`) + **Vite** + **Element Plus** (Chinese locale) + **ECharts** (tree-shaken via `use()`) + **Tailwind CSS 4**
-- **Hash-based routing** (`createWebHashHistory`): `/` → Home, `/contest/:id`, `/school/:name`, `/player/:name`, `/compare`
+- **Hash-based routing** (`createWebHashHistory`):
+  - `/` → Home (year selection)
+  - `/:year/` → YearHome (contest list for that year)
+  - `/:year/contest/:id` → Contest detail
+  - `/:year/summary` → Summary
+  - `/:year/school/:name` → School detail
+  - `/:year/player/:name` → Player detail
+  - `/announcement` → Announcement (global)
 - Views are **lazy-loaded** via dynamic `import()` in `web/src/main.js`
 - **No backend/API** — `web/src/utils/dataLoader.js` fetches static JSON from `web/public/data/` with in-memory caching
 - `web/src/utils/formatters.js` contains submission parsing (`+1(170)` → solved, 2 attempts, 170 min), medal display, and school aggregation logic
@@ -45,17 +52,18 @@ python scripts/extract_oi_records.py   # matches raw.txt OI records to players �
 ```
 
 ### Data Pipeline (`scripts/`)
-1. `convert_xlsx.py` — primary: xlsx → contest JSON files
-2. `extract_players.py` — secondary: extracts unique (school, name) pairs
-3. `extract_oi_records.py` — enrichment: matches OI competition history from `raw.txt` (~25MB CSV) to XCPC players, calculates expected college year (freshman–senior) based on high school grade at competition time
+1. `convert_xlsx.py` — primary: xlsx → contest JSON files (supports multiple years)
+2. `extract_players.py` — secondary: extracts unique (school, name) pairs across all years
+3. `extract_oi_records.py` — enrichment: matches OI competition history from `raw.txt` to XCPC players per year, calculates expected college year based on high school grade at competition time
 
 ### Key Data Files
-- `web/public/data/contests.json` — contest index (11 entries with id, org, city_cn, name)
-- `web/public/data/{xian,chengdu,...}.json` — per-contest team data
-- `web/public/data/oi_records.json` — OI history per player
-- `web/public/data/985.json` / `211.json` — university tier lists
+- `web/public/data/years.json` — available years index
+- `web/public/data/{year}/contests.json` — contest index per year
+- `web/public/data/{year}/{contest_id}.json` — per-contest team data
+- `web/public/data/{year}/oi_records.json` — OI history per player per year
+- `web/public/data/985.json` / `211.json` — university tier lists (global)
 - `raw.txt` — source OI records (root level, not served to frontend)
-- `*.xlsx` — source contest result files (root level, 11 files)
+- `xcpc/{year}/*.xlsx` — source contest result files
 
 ## Conventions
 

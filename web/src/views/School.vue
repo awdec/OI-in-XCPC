@@ -4,6 +4,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { loadAllContests, loadSchoolTags } from '../utils/dataLoader'
 import TeamDetail from '../components/TeamDetail.vue'
 
+const props = defineProps({
+  year: {
+    type: String,
+    required: true
+  }
+})
+
 const route = useRoute()
 const router = useRouter()
 
@@ -20,10 +27,10 @@ const stats = computed(() => {
   return { count: allTeams.value.length, totalSolved, bestRank }
 })
 
-const loadData = async () => {
+const loadData = async (year) => {
   loading.value = true
   schoolTags.value = await loadSchoolTags()
-  const contests = await loadAllContests()
+  const contests = await loadAllContests(year)
   const teams = []
   contests.forEach(c => {
     const formal = c.sheets['正式队伍'] || []
@@ -37,8 +44,8 @@ const loadData = async () => {
   loading.value = false
 }
 
-onMounted(loadData)
-watch(() => route.params.name, loadData)
+onMounted(() => loadData(props.year))
+watch(() => route.params.name, () => loadData(props.year))
 </script>
 
 <template>
@@ -73,11 +80,11 @@ watch(() => route.params.name, loadData)
         <el-table-column prop="rank" label="排名" width="70" align="center" />
         <el-table-column label="学校" min-width="160" show-overflow-tooltip>
           <template #default="{ row }">
-            <router-link :to="`/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline" @click.stop>
+            <router-link :to="`/${year}/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline" @click.stop>
               {{ row.school }}
             </router-link>
-            <el-tag v-if="schoolTags.set985.has(row.school)" size="small" type="danger" class="ml-1">985</el-tag>
-            <el-tag v-else-if="schoolTags.set211.has(row.school)" size="small" type="warning" class="ml-1">211</el-tag>
+            <el-tag v-if="schoolTags.set985.has(row.school)" size="small" type="danger" disable-transitions class="ml-1">985</el-tag>
+            <el-tag v-else-if="schoolTags.set211.has(row.school)" size="small" type="warning" disable-transitions class="ml-1">211</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="队伍" min-width="130" show-overflow-tooltip>
@@ -99,7 +106,7 @@ watch(() => route.params.name, loadData)
               </template>
               <span class="inline-flex items-center">
                 <router-link
-                  :to="`/player/${encodeURIComponent(row.members[0].name)}`"
+                  :to="`/${year}/player/${encodeURIComponent(row.members[0].name)}`"
                   class="text-gray-700 hover:text-blue-600 hover:underline"
                   @click.stop
                 >{{ row.members[0].name }}</router-link>
@@ -120,7 +127,7 @@ watch(() => route.params.name, loadData)
               </template>
               <span class="inline-flex items-center">
                 <router-link
-                  :to="`/player/${encodeURIComponent(row.members[1].name)}`"
+                  :to="`/${year}/player/${encodeURIComponent(row.members[1].name)}`"
                   class="text-gray-700 hover:text-blue-600 hover:underline"
                   @click.stop
                 >{{ row.members[1].name }}</router-link>
@@ -141,7 +148,7 @@ watch(() => route.params.name, loadData)
               </template>
               <span class="inline-flex items-center">
                 <router-link
-                  :to="`/player/${encodeURIComponent(row.members[2].name)}`"
+                  :to="`/${year}/player/${encodeURIComponent(row.members[2].name)}`"
                   class="text-gray-700 hover:text-blue-600 hover:underline"
                   @click.stop
                 >{{ row.members[2].name }}</router-link>

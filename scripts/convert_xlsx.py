@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-将 2025 ICPC/CCPC xlsx 文件转换为前端可用的 JSON 数据。
-输出目录: web/public/data/
+将 ICPC/CCPC xlsx 文件转换为前端可用的 JSON 数据。
+支持多年份数据，遍历 xcpc/ 下所有年份目录。
+输出目录: web/public/data/{year}/
 """
 
 import os
 import re
 import json
+import shutil
 import pandas as pd
 from pathlib import Path
 
@@ -14,23 +16,49 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT / "web" / "public" / "data"
 
-# 赛区元数据
-CONTEST_META = {
-    "xian":       {"org": "ICPC",     "city_cn": "西安",   "name": "ICPC 西安"},
-    "chengdu":    {"org": "ICPC",     "city_cn": "成都",   "name": "ICPC 成都"},
-    "wuhan":      {"org": "ICPC",     "city_cn": "武汉",   "name": "ICPC 武汉"},
-    "nanjing":    {"org": "ICPC",     "city_cn": "南京",   "name": "ICPC 南京"},
-    "shenyang":   {"org": "ICPC",     "city_cn": "沈阳",   "name": "ICPC 沈阳"},
-    "shanghai":   {"org": "ICPC",     "city_cn": "上海",   "name": "ICPC 上海"},
-    "haerbin":    {"org": "CCPC",     "city_cn": "哈尔滨", "name": "CCPC 哈尔滨"},
-    "jinan":      {"org": "CCPC",     "city_cn": "济南",   "name": "CCPC 济南"},
-    "zhengzhou":  {"org": "CCPC",     "city_cn": "郑州",   "name": "CCPC 郑州"},
-    "chongqing":  {"org": "CCPC",     "city_cn": "重庆",   "name": "CCPC 重庆"},
-    "hangzhou":   {"org": "EC-Final", "city_cn": "杭州",   "name": "EC-Final 杭州"},
-}
-
 # 题号列表
 PROBLEM_LETTERS = list("ABCDEFGHIJKLM")
+
+# 城市名称映射（英文小写 → 中文）
+CITY_MAP = {
+    "kunming": "昆明",
+    "jinan": "济南",
+    "nanjing": "南京",
+    "shanghai": "上海",
+    "shenyang": "沈阳",
+    "beijing": "北京",
+    "guangzhou": "广州",
+    "chengdu": "成都",
+    "wuhan": "武汉",
+    "xian": "西安",
+    "hangzhou": "杭州",
+    "chongqing": "重庆",
+    "haerbin": "哈尔滨",
+    "harbin": "哈尔滨",
+    "zhengzhou": "郑州",
+    "weihai": "威海",
+    "qinhuangdao": "秦皇岛",
+    "changchun": "长春",
+    "mianyang": "绵阳",
+    "hefei": "合肥",
+    "xiamen": "厦门",
+    "dalian": "大连",
+    "changsha": "长沙",
+    "taiyuan": "太原",
+    "lanzhou": "兰州",
+    "nanning": "南宁",
+    "guiyang": "贵阳",
+    "kunshan": "昆山",
+    "yinchuan": "银川",
+    "urumqi": "乌鲁木齐",
+    "fuzhou": "福州",
+    "guilin": "桂林",
+    "shenzhen": "深圳",
+    "final": "总决赛",
+}
+
+# 中文城市名 → 英文 ID 映射
+CN_TO_ID = {v: k for k, v in CITY_MAP.items()}
 
 
 def parse_submission(raw):
@@ -132,22 +160,105 @@ def detect_problem_columns(columns):
     return [c for c in columns if c in PROBLEM_LETTERS]
 
 
-def load_oi_records():
-    """加载 OI 奖项记录。"""
-    oi_path = ROOT / "oi_records.json"
+def parse_contest_filename(filename):
+    """
+    从文件名解析赛区信息。
+    支持多种格式:
+      - "ICPC kunming.xlsx"
+      - "第 46 届 ICPC 亚洲区域赛（昆明）正式赛.xlsx"
+      - "第 47 届国际大学生程序设计竞赛亚洲区域赛南京站（正式赛）.xlsx"
+      - "第 48 届 ICPC 国际大学生程序设计竞赛区域赛杭州站 - 正式赛.xlsx"
+      - "The 46th ICPC Asia Jinan Regional Contest - Contest Session.xlsx"
+      - "The 48th ICPC Asia East Continent Final Contest.xlsx"
+    返回: (org, contest_id, city_cn, name)
+    """
+    stem = Path(filename).stem
+
+    # 判断组织类型
+    org = "ICPC"  # 默认 ICPC
+    stem_lower = stem.lower()
+    if "ccpc" in stem_lower:
+        org = "CCPC"
+    elif "icpc" in stem_lower:
+        org = "ICPC"
+
+    # 尝试从中文文件名中提取城市
+    # 模式1: 括号中的城市名 （城市）
+    m = re.search(r'[（(](\w+)[）)]', stem)
+    if m:
+        city_cn = m.group(1)
+        if city_cn in CN_TO_ID:
+            contest_id = CN_TO_ID[city_cn]
+            name = f"{org} {city_cn}"
+            return org, contest_id, city_cn, name
+
+    # 模式2: "城市站" 格式
+    for city_cn, city_id in CN_TO_ID.items():
+        if city_cn in stem and city_cn != "总决赛":
+            # 确认是城市名而不是其他词
+            if f"{city_cn}站" in stem or f"{city_cn}赛" in stem or f"赛{city_cn}" in stem:
+                contest_id = city_id
+                name = f"{org} {city_cn}"
+                return org, contest_id, city_cn, name
+            # 检查是否是独立的城市名
+            idx = stem.find(city_cn)
+            if idx >= 0:
+                # 检查前后字符
+                before = stem[idx-1] if idx > 0 else ""
+                after = stem[idx+len(city_cn)] if idx+len(city_cn) < len(stem) else ""
+                if (not before or not before.isalnum()) and (not after or not after.isalnum()):
+                    contest_id = city_id
+                    name = f"{org} {city_cn}"
+                    return org, contest_id, city_cn, name
+
+    # 模式3: 英文格式 "ICPC kunming" 或 "The 46th ICPC Asia Jinan Regional Contest"
+    parts = stem.split()
+    if len(parts) >= 2:
+        # 检查是否有英文城市名
+        for part in parts:
+            part_lower = part.lower()
+            if part_lower in CITY_MAP and part_lower != "final":
+                city_cn = CITY_MAP[part_lower]
+                contest_id = part_lower
+                name = f"{org} {city_cn}"
+                return org, contest_id, city_cn, name
+
+    # 模式4: "Final" 或 "final"
+    if "final" in stem_lower:
+        return org, "final", "总决赛", f"{org} 总决赛"
+
+    # 模式5: 简单格式 "CCPC final"
+    if len(parts) >= 2:
+        contest_id = parts[-1].lower()
+        if contest_id in CITY_MAP:
+            city_cn = CITY_MAP[contest_id]
+            name = f"{org} {city_cn}"
+            return org, contest_id, city_cn, name
+
+    return None
+
+
+def load_oi_records(year):
+    """加载指定年份的 OI 奖项记录。"""
+    oi_path = OUTPUT_DIR / str(year) / "oi_records.json"
     if not oi_path.exists():
-        print("警告: oi_records.json 不存在，跳过 OI 记录嵌入")
+        # 尝试根目录
+        oi_path = ROOT / "oi_records.json"
+    if not oi_path.exists():
+        print(f"警告: {year} 年 OI 记录不存在，跳过 OI 记录嵌入")
         return {}
     with open(oi_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def convert_file(xlsx_path, contest_id, oi_records):
+def convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records):
     """转换单个 xlsx 文件为 JSON。"""
     xls = pd.ExcelFile(xlsx_path)
     result = {
         "id": contest_id,
-        **CONTEST_META[contest_id],
+        "org": org,
+        "city_cn": city_cn,
+        "name": name,
         "sheets": {}
     }
 
@@ -175,48 +286,53 @@ def convert_file(xlsx_path, contest_id, oi_records):
     return result
 
 
-def main():
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def process_year(year_dir):
+    """处理单个年份目录。"""
+    year = year_dir.name
+    print(f"\n{'='*50}")
+    print(f"处理 {year} 年数据")
+    print(f"{'='*50}")
 
-    xlsx_files = sorted(ROOT.glob("*.xlsx"))
+    xlsx_files = sorted(year_dir.glob("*.xlsx"))
     if not xlsx_files:
-        print("错误: 未找到 xlsx 文件")
-        return
+        print(f"警告: {year} 目录下未找到 xlsx 文件")
+        return []
+
+    # 创建年份输出目录
+    year_output = OUTPUT_DIR / year
+    year_output.mkdir(parents=True, exist_ok=True)
+
+    # 加载该年份的 OI 记录
+    oi_records = load_oi_records(year)
 
     contests_index = []
-    oi_records = load_oi_records()
 
     for xlsx_path in xlsx_files:
-        # 从文件名提取赛区 ID
-        stem = xlsx_path.stem  # e.g. "2025 ICPC xian"
-        parts = stem.split()
-        if len(parts) >= 3:
-            contest_id = parts[-1].lower()
-        else:
+        # 解析文件名获取赛区信息
+        result = parse_contest_filename(xlsx_path.name)
+        if result is None:
             print(f"跳过: {xlsx_path.name} (无法解析赛区)")
             continue
 
-        if contest_id not in CONTEST_META:
-            print(f"跳过: {xlsx_path.name} (未知赛区 {contest_id})")
-            continue
-
+        org, contest_id, city_cn, name = result
         print(f"处理: {xlsx_path.name} -> {contest_id}.json")
-        data = convert_file(xlsx_path, contest_id, oi_records)
+
+        data = convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records)
 
         # 写入单赛区 JSON
-        output_path = OUTPUT_DIR / f"{contest_id}.json"
+        output_path = year_output / f"{contest_id}.json"
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
         # 构建索引
-        total_teams = len(data["sheets"].get("所有队伍", []))
+        total_teams = len(data["sheets"].get("正式队伍", []))
         top_team = data["sheets"].get("正式队伍", [{}])[0] if data["sheets"].get("正式队伍") else {}
 
         contests_index.append({
             "id": contest_id,
-            "name": CONTEST_META[contest_id]["name"],
-            "org": CONTEST_META[contest_id]["org"],
-            "city": CONTEST_META[contest_id]["city_cn"],
+            "name": name,
+            "org": org,
+            "city": city_cn,
             "teams": total_teams,
             "champion": {
                 "school": top_team.get("school", ""),
@@ -226,20 +342,50 @@ def main():
             } if top_team else None
         })
 
-    # 写入索引文件
-    index_path = OUTPUT_DIR / "contests.json"
+    # 写入该年份的索引文件
+    index_path = year_output / "contests.json"
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(contests_index, f, ensure_ascii=False, indent=2)
 
-    # 复制 OI 记录到前端数据目录
-    import shutil
-    oi_src = ROOT / "oi_records.json"
-    if oi_src.exists():
-        shutil.copy2(oi_src, OUTPUT_DIR / "oi_records.json")
-        print("已同步 oi_records.json")
+    print(f"\n{year} 年完成! 共转换 {len(contests_index)} 个赛区")
+    return contests_index
 
-    print(f"\n完成! 共转换 {len(contests_index)} 个赛区")
-    print(f"输出目录: {OUTPUT_DIR}")
+
+def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 查找所有年份目录
+    xcpc_dir = ROOT / "xcpc"
+    if not xcpc_dir.exists():
+        print("错误: xcpc 目录不存在")
+        return
+
+    year_dirs = sorted([d for d in xcpc_dir.iterdir() if d.is_dir() and d.name.isdigit()])
+    if not year_dirs:
+        print("错误: xcpc 下未找到年份目录")
+        return
+
+    print(f"找到年份目录: {[d.name for d in year_dirs]}")
+
+    # 处理每个年份
+    all_years = []
+    for year_dir in year_dirs:
+        contests = process_year(year_dir)
+        if contests:
+            all_years.append({
+                "year": int(year_dir.name),
+                "contest_count": len(contests),
+                "total_teams": sum(c["teams"] for c in contests),
+            })
+
+    # 生成全局 years.json 索引
+    years_path = OUTPUT_DIR / "years.json"
+    with open(years_path, "w", encoding="utf-8") as f:
+        json.dump(all_years, f, ensure_ascii=False, indent=2)
+
+    print(f"\n{'='*50}")
+    print(f"全部完成! 共处理 {len(all_years)} 个年份")
+    print(f"年份索引: {years_path}")
 
 
 if __name__ == "__main__":

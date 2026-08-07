@@ -1,0 +1,132 @@
+[
+  {
+    "id": "final",
+    "name": "CCPC 总决赛",
+    "org": "CCPC",
+    "city": "总决赛",
+    "teams": 129,
+    "champion": {
+      "school": "北京大学",
+      "team": "重生之我是菜狗",
+      "solved": 11,
+      "penalty": 1497
+    }
+  },
+  {
+    "id": "guangzhou",
+    "name": "CCPC 广州",
+    "org": "CCPC",
+    "city": "广州",
+    "teams": 240,
+    "champion": {
+      "school": "中南大学",
+      "team": "明日之风的三重奏",
+      "solved": 9,
+      "penalty": 1255
+    }
+  },
+  {
+    "id": "guilin",
+    "name": "CCPC 桂林",
+    "org": "CCPC",
+    "city": "桂林",
+    "teams": 240,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 11,
+      "penalty": 1616
+    }
+  },
+  {
+    "id": "mianyang",
+    "name": "CCPC 绵阳",
+    "org": "CCPC",
+    "city": "绵阳",
+    "teams": 240,
+    "champion": {
+      "school": "北京大学",
+      "team": "摆烂人",
+      "solved": 10,
+      "penalty": 1511
+    }
+  },
+  {
+    "id": "nanjing",
+    "name": "ICPC 南京",
+    "org": "ICPC",
+    "city": "南京",
+    "teams": 438,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 11,
+      "penalty": 1456
+    }
+  },
+  {
+    "id": "hefei",
+    "name": "ICPC 合肥",
+    "org": "ICPC",
+    "city": "合肥",
+    "teams": 454,
+    "champion": {
+      "school": "清华大学",
+      "team": "青蛙市中心",
+      "solved": 12,
+      "penalty": 1145
+    }
+  },
+  {
+    "id": "hangzhou",
+    "name": "ICPC 杭州",
+    "org": "ICPC",
+    "city": "杭州",
+    "teams": 556,
+    "champion": {
+      "school": "北京大学",
+      "team": "摆烂人",
+      "solved": 10,
+      "penalty": 1290
+    }
+  },
+  {
+    "id": "shenyang",
+    "name": "ICPC 沈阳",
+    "org": "ICPC",
+    "city": "沈阳",
+    "teams": 708,
+    "champion": {
+      "school": "浙江大学",
+      "team": "幽灵门槛",
+      "solved": 8,
+      "penalty": 852
+    }
+  },
+  {
+    "id": "jinan",
+    "name": "ICPC 济南",
+    "org": "ICPC",
+    "city": "济南",
+    "teams": 511,
+    "champion": {
+      "school": "北京大学",
+      "team": "重生之我是菜狗",
+      "solved": 12,
+      "penalty": 1312
+    }
+  },
+  {
+    "id": "xian",
+    "name": "ICPC 西安",
+    "org": "ICPC",
+    "city": "西安",
+    "teams": 476,
+    "champion": {
+      "school": "北京大学",
+      "team": "摆烂人",
+      "solved": 11,
+      "penalty": 827
+    }
+  }
+]

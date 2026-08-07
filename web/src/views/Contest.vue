@@ -7,6 +7,13 @@ import RankTable from '../components/RankTable.vue'
 import TeamDetail from '../components/TeamDetail.vue'
 import SchoolStats from '../components/SchoolStats.vue'
 
+const props = defineProps({
+  year: {
+    type: String,
+    required: true
+  }
+})
+
 const route = useRoute()
 
 const contest = ref(null)
@@ -49,15 +56,15 @@ const schoolStats = computed(() => {
   return aggregateBySchool(formal)
 })
 
-const loadContest = async (id) => {
+const loadContest = async (year, id) => {
   loading.value = true
-  contest.value = await loadContestData(id)
+  contest.value = await loadContestData(year, id)
   schoolTags.value = await loadSchoolTags()
   loading.value = false
 }
 
-onMounted(() => loadContest(route.params.id))
-watch(() => route.params.id, (id) => { if (id) loadContest(id) })
+onMounted(() => loadContest(props.year, route.params.id))
+watch(() => route.params.id, (id) => { if (id) loadContest(props.year, id) })
 
 const openTeamDetail = (team) => {
   selectedTeam.value = team

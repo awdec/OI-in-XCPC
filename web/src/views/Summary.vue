@@ -1,7 +1,16 @@
 <script setup>
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 import { loadContestsIndex, loadContestData, loadSchoolTags } from '../utils/dataLoader'
 
+const props = defineProps({
+  year: {
+    type: String,
+    required: true
+  }
+})
+
+const route = useRoute()
 const wait = (ms) => new Promise(r => setTimeout(r, ms))
 
 const rows = ref([])
@@ -109,13 +118,17 @@ const medalClass = (medal) => {
   return ''
 }
 
-onMounted(async () => {
+const loadData = async (year) => {
+  loading.value = true
+  loadProgress.value = 0
+  rows.value = []
+
   schoolTags.value = await loadSchoolTags()
-  const index = await loadContestsIndex()
+  const index = await loadContestsIndex(year)
   loadTotal.value = index.length
   const allData = []
   for (const c of index) {
-    allData.push(await loadContestData(c.id))
+    allData.push(await loadContestData(year, c.id))
     loadProgress.value++
     await nextTick()
     await wait(120)
@@ -139,12 +152,17 @@ onMounted(async () => {
   }
   rows.value = result
   loading.value = false
+}
+
+onMounted(() => loadData(props.year))
+watch(() => props.year, (newYear) => {
+  if (newYear) loadData(newYear)
 })
 </script>
 
 <template>
   <div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-2">全部成绩汇总</h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ year }} 年全部成绩汇总</h2>
 
     <div v-if="loading" class="flex flex-col items-center py-20">
       <el-progress
@@ -212,11 +230,11 @@ onMounted(async () => {
       <el-table-column prop="rank" label="排名" width="80" align="center" />
       <el-table-column label="学校" min-width="180">
         <template #default="{ row }">
-          <router-link :to="`/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline">
+          <router-link :to="`/${year}/school/${encodeURIComponent(row.school)}`" class="text-blue-600 hover:underline">
             {{ row.school }}
           </router-link>
-          <el-tag v-if="schoolTags.set985.has(row.school)" size="small" type="danger" class="ml-1">985</el-tag>
-          <el-tag v-else-if="schoolTags.set211.has(row.school)" size="small" type="warning" class="ml-1">211</el-tag>
+          <el-tag v-if="schoolTags.set985.has(row.school)" size="small" type="danger" disable-transitions class="ml-1">985</el-tag>
+          <el-tag v-else-if="schoolTags.set211.has(row.school)" size="small" type="warning" disable-transitions class="ml-1">211</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="team" label="队伍名" min-width="180" />
@@ -232,7 +250,7 @@ onMounted(async () => {
             </template>
             <span class="inline-flex items-center">
               <router-link
-                :to="`/player/${encodeURIComponent(row.members[0].name)}`"
+                :to="`/${year}/player/${encodeURIComponent(row.members[0].name)}`"
                 class="text-gray-700 hover:text-blue-600 hover:underline"
               >{{ row.members[0].name }}</router-link>
               <span v-if="row.members[0].oi?.length" class="ml-0.5">☀️</span>
@@ -252,7 +270,7 @@ onMounted(async () => {
             </template>
             <span class="inline-flex items-center">
               <router-link
-                :to="`/player/${encodeURIComponent(row.members[1].name)}`"
+                :to="`/${year}/player/${encodeURIComponent(row.members[1].name)}`"
                 class="text-gray-700 hover:text-blue-600 hover:underline"
               >{{ row.members[1].name }}</router-link>
               <span v-if="row.members[1].oi?.length" class="ml-0.5">☀️</span>
@@ -272,7 +290,7 @@ onMounted(async () => {
             </template>
             <span class="inline-flex items-center">
               <router-link
-                :to="`/player/${encodeURIComponent(row.members[2].name)}`"
+                :to="`/${year}/player/${encodeURIComponent(row.members[2].name)}`"
                 class="text-gray-700 hover:text-blue-600 hover:underline"
               >{{ row.members[2].name }}</router-link>
               <span v-if="row.members[2].oi?.length" class="ml-0.5">☀️</span>

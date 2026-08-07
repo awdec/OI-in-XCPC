@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-遍历所有 xlsx 文件，提取 (学校, 姓名) 二元组，去重后输出到 web/public/data/players.json。
+遍历所有年份的 xlsx 文件，提取 (学校, 姓名) 二元组，去重后输出到 players.json。
 """
 
 import json
@@ -12,35 +12,53 @@ OUTPUT = ROOT / "players.json"
 
 
 def main():
-    xlsx_files = sorted(ROOT.glob("*.xlsx"))
-    if not xlsx_files:
-        print("错误: 未找到 xlsx 文件")
+    xcpc_dir = ROOT / "xcpc"
+    if not xcpc_dir.exists():
+        print("错误: xcpc 目录不存在")
         return
+
+    year_dirs = sorted([d for d in xcpc_dir.iterdir() if d.is_dir() and d.name.isdigit()])
+    if not year_dirs:
+        print("错误: xcpc 下未找到年份目录")
+        return
+
+    print(f"找到年份目录: {[d.name for d in year_dirs]}")
 
     pairs = set()
 
-    for xlsx_path in xlsx_files:
-        xls = pd.ExcelFile(xlsx_path)
-        for sheet_name in xls.sheet_names:
-            if sheet_name != "正式队伍":
-                continue
-            df = pd.read_excel(xls, sheet_name=sheet_name, header=1)
-            for _, row in df.iterrows():
-                school = row.get("Organization")
-                if pd.isna(school):
-                    continue
-                school = str(school).strip()
-                for col in ["Member1", "Member2", "Member3"]:
-                    name = row.get(col)
-                    if pd.notna(name):
-                        pairs.add((school, str(name).strip()))
+    for year_dir in year_dirs:
+        year = year_dir.name
+        xlsx_files = sorted(year_dir.glob("*.xlsx"))
+        if not xlsx_files:
+            print(f"跳过: {year} 目录下未找到 xlsx 文件")
+            continue
+
+        print(f"处理 {year} 年...")
+        for xlsx_path in xlsx_files:
+            try:
+                xls = pd.ExcelFile(xlsx_path)
+                for sheet_name in xls.sheet_names:
+                    if sheet_name != "正式队伍":
+                        continue
+                    df = pd.read_excel(xls, sheet_name=sheet_name, header=1)
+                    for _, row in df.iterrows():
+                        school = row.get("Organization")
+                        if pd.isna(school):
+                            continue
+                        school = str(school).strip()
+                        for col in ["Member1", "Member2", "Member3"]:
+                            name = row.get(col)
+                            if pd.notna(name):
+                                pairs.add((school, str(name).strip()))
+            except Exception as e:
+                print(f"  警告: 处理 {xlsx_path.name} 时出错: {e}")
 
     result = sorted(pairs, key=lambda x: (x[0], x[1]))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-    print(f"共提取 {len(result)} 个去重选手 (学校+姓名)")
+    print(f"\n共提取 {len(result)} 个去重选手 (学校+姓名)")
     print(f"输出: {OUTPUT}")
 
 

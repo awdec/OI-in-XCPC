@@ -1,0 +1,132 @@
+[
+  {
+    "id": "chongqing",
+    "name": "CCPC 重庆",
+    "org": "CCPC",
+    "city": "重庆",
+    "teams": 278,
+    "champion": {
+      "school": "中山大学",
+      "team": "中山大学2队",
+      "solved": 11,
+      "penalty": 1286
+    }
+  },
+  {
+    "id": "haerbin",
+    "name": "CCPC 哈尔滨",
+    "org": "CCPC",
+    "city": "哈尔滨",
+    "teams": 280,
+    "champion": {
+      "school": "北京大学",
+      "team": "呆呆鸟",
+      "solved": 11,
+      "penalty": 930
+    }
+  },
+  {
+    "id": "jinan",
+    "name": "CCPC 济南",
+    "org": "CCPC",
+    "city": "济南",
+    "teams": 280,
+    "champion": {
+      "school": "清华大学",
+      "team": "world.search(you);",
+      "solved": 11,
+      "penalty": 1257
+    }
+  },
+  {
+    "id": "zhengzhou",
+    "name": "CCPC 郑州",
+    "org": "CCPC",
+    "city": "郑州",
+    "teams": 280,
+    "champion": {
+      "school": "北京大学",
+      "team": "赤橙黄绿蓝紫",
+      "solved": 12,
+      "penalty": 1421
+    }
+  },
+  {
+    "id": "shanghai",
+    "name": "ICPC 上海",
+    "org": "ICPC",
+    "city": "上海",
+    "teams": 336,
+    "champion": {
+      "school": "北京大学",
+      "team": "随机匹配",
+      "solved": 9,
+      "penalty": 979
+    }
+  },
+  {
+    "id": "nanjing",
+    "name": "ICPC 南京",
+    "org": "ICPC",
+    "city": "南京",
+    "teams": 336,
+    "champion": {
+      "school": "浙江大学",
+      "team": "来生",
+      "solved": 8,
+      "penalty": 848
+    }
+  },
+  {
+    "id": "chengdu",
+    "name": "ICPC 成都",
+    "org": "ICPC",
+    "city": "成都",
+    "teams": 307,
+    "champion": {
+      "school": "北京大学",
+      "team": "赤橙黄绿蓝紫",
+      "solved": 12,
+      "penalty": 1059
+    }
+  },
+  {
+    "id": "kunming",
+    "name": "ICPC 昆明",
+    "org": "ICPC",
+    "city": "昆明",
+    "teams": 449,
+    "champion": {
+      "school": "清华大学",
+      "team": "一路向北",
+      "solved": 12,
+      "penalty": 1549
+    }
+  },
+  {
+    "id": "hangzhou",
+    "name": "ICPC 杭州",
+    "org": "ICPC",
+    "city": "杭州",
+    "teams": 366,
+    "champion": {
+      "school": "北京大学",
+      "team": "思路打开",
+      "solved": 12,
+      "penalty": 1491
+    }
+  },
+  {
+    "id": "shenyang",
+    "name": "ICPC 沈阳",
+    "org": "ICPC",
+    "city": "沈阳",
+    "teams": 300,
+    "champion": {
+      "school": "北京大学",
+      "team": "赤橙黄绿蓝紫",
+      "solved": 11,
+      "penalty": 1221
+    }
+  }
+]

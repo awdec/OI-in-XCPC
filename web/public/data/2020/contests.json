@@ -1,0 +1,119 @@
+[
+  {
+    "id": "changchun",
+    "name": "CCPC 长春",
+    "org": "CCPC",
+    "city": "长春",
+    "teams": 267,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 11,
+      "penalty": 1689
+    }
+  },
+  {
+    "id": "mianyang",
+    "name": "CCPC 绵阳",
+    "org": "CCPC",
+    "city": "绵阳",
+    "teams": 268,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 10,
+      "penalty": 1092
+    }
+  },
+  {
+    "id": "qinhuangdao",
+    "name": "CCPC 秦皇岛",
+    "org": "CCPC",
+    "city": "秦皇岛",
+    "teams": 243,
+    "champion": {
+      "school": "北京大学",
+      "team": "校门外歪脖树上的鸽子",
+      "solved": 9,
+      "penalty": 716
+    }
+  },
+  {
+    "id": "weihai",
+    "name": "CCPC 威海",
+    "org": "CCPC",
+    "city": "威海",
+    "teams": 267,
+    "champion": {
+      "school": "上海交通大学",
+      "team": "不朽之夜",
+      "solved": 10,
+      "penalty": 1194
+    }
+  },
+  {
+    "id": "jinan",
+    "name": "ICPC 济南",
+    "org": "ICPC",
+    "city": "济南",
+    "teams": 496,
+    "champion": {
+      "school": "清华大学",
+      "team": "喵喵喵喵喵喵喵喵喵喵喵喵",
+      "solved": 10,
+      "penalty": 908
+    }
+  },
+  {
+    "id": "kunming",
+    "name": "ICPC 昆明",
+    "org": "ICPC",
+    "city": "昆明",
+    "teams": 763,
+    "champion": {
+      "school": "清华大学",
+      "team": "三个顶俩",
+      "solved": 13,
+      "penalty": 1636
+    }
+  },
+  {
+    "id": "nanjing",
+    "name": "ICPC 南京",
+    "org": "ICPC",
+    "city": "南京",
+    "teams": 554,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 10,
+      "penalty": 915
+    }
+  },
+  {
+    "id": "shanghai",
+    "name": "ICPC 上海",
+    "org": "ICPC",
+    "city": "上海",
+    "teams": 635,
+    "champion": {
+      "school": "西安交通大学",
+      "team": "渡渡鸟幼儿园",
+      "solved": 11,
+      "penalty": 1409
+    }
+  },
+  {
+    "id": "shenyang",
+    "name": "ICPC 沈阳",
+    "org": "ICPC",
+    "city": "沈阳",
+    "teams": 269,
+    "champion": {
+      "school": "北京大学",
+      "team": "逆十字",
+      "solved": 12,
+      "penalty": 1083
+    }
+  }
+]

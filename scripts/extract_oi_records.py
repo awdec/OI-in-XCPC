@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 为 players.json 中的每个选手，从 raw.txt 中提取有效 OI 奖项记录。
-规则：根据比赛时的年级推算 2025H2 是否在大一~大五范围内。
-输出：根目录 oi_records.json
+规则：根据比赛时的年级推算指定年份是否在大一~大五范围内。
+输出：web/public/data/{year}/oi_records.json
 """
 
 import json
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "raw.txt"
 PLAYERS = ROOT / "players.json"
-OUTPUT = ROOT / "oi_records.json"
+OUTPUT_DIR = ROOT / "web" / "public" / "data"
 
 
 def parse_grade(grade_str):
@@ -52,11 +52,11 @@ def is_spring_competition(comp_name):
     return name.startswith('WC') or name.startswith('APIO') or name.startswith('NOI')
 
 
-def calc_college_year_in_2025(comp_year, grade_num, comp_name=''):
+def calc_college_year(target_year, comp_year, grade_num, comp_name=''):
     """
-    根据比赛年份和年级，推算 2025H2 的大学年级。
+    根据比赛年份和年级，推算目标年份的大学年级。
     毕业年 = comp_year + (12 - grade_num)
-    大学年级 = 2025 - 毕业年 + 1
+    大学年级 = target_year - 毕业年 + 1
 
     注意：上半年比赛（WC/APIO/NOI）时年级尚未升级，
     需要 +1 来对齐秋天的年级。
@@ -64,11 +64,14 @@ def calc_college_year_in_2025(comp_year, grade_num, comp_name=''):
     if is_spring_competition(comp_name):
         grade_num += 1
     grad_year = comp_year + (13 - grade_num)
-    college_year = 2025 - grad_year + 1
+    college_year = target_year - grad_year + 1
     return college_year
 
 
-def main():
+def extract_oi_records_for_year(target_year):
+    """为指定年份提取 OI 记录。"""
+    print(f"\n处理 {target_year} 年 OI 记录...")
+
     with open(PLAYERS, 'r', encoding='utf-8') as f:
         players = json.load(f)
 
@@ -96,7 +99,7 @@ def main():
                 continue
             comp_year = int(year_match.group(1))
 
-            college_year = calc_college_year_in_2025(comp_year, grade_num, comp_name)
+            college_year = calc_college_year(target_year, comp_year, grade_num, comp_name)
             if not (1 <= college_year <= 5):
                 continue
 
@@ -117,12 +120,40 @@ def main():
             result[key] = records[name]
             matched += 1
 
-    with open(OUTPUT, 'w', encoding='utf-8') as f:
+    # 输出到年份目录
+    year_output = OUTPUT_DIR / str(target_year)
+    year_output.mkdir(parents=True, exist_ok=True)
+    output_path = year_output / "oi_records.json"
+
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     print(f"选手总数: {len(players)}")
     print(f"有 OI 记录且在大一~大五范围: {matched}")
-    print(f"输出: {OUTPUT}")
+    print(f"输出: {output_path}")
+
+    return result
+
+
+def main():
+    # 查找所有年份目录
+    xcpc_dir = ROOT / "xcpc"
+    if not xcpc_dir.exists():
+        print("错误: xcpc 目录不存在")
+        return
+
+    year_dirs = sorted([d for d in xcpc_dir.iterdir() if d.is_dir() and d.name.isdigit()])
+    if not year_dirs:
+        print("错误: xcpc 下未找到年份目录")
+        return
+
+    print(f"找到年份目录: {[d.name for d in year_dirs]}")
+
+    for year_dir in year_dirs:
+        year = int(year_dir.name)
+        extract_oi_records_for_year(year)
+
+    print(f"\n全部完成! 共处理 {len(year_dirs)} 个年份")
 
 
 if __name__ == "__main__":
