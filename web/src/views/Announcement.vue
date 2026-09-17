@@ -18,7 +18,7 @@ const announcements = [
   {
     date: '2026-8-4',
     title: '关于作者',
-    content: '本平台由 awdec 维护，您有任何问题都可以联系我，QQ 1120571672 或 微信 ice9982544353。',
+    content: '本平台由 awdec 维护，您有任何问题都可以联系我，QQ 1120571672 或 微信 ice998244353。',
   },  
   {
     date: '2026-8-4',
