@@ -7,7 +7,7 @@ import json
 import pandas as pd
 from pathlib import Path
 
-from domjudge import is_domjudge_format, read_domjudge_teams
+from domjudge import is_domjudge_format, domjudge_sheet_name, read_domjudge_teams
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "players.json"
@@ -37,12 +37,15 @@ def main():
 
         print(f"处理 {year} 年...")
         for xlsx_path in xlsx_files:
+            if xlsx_path.name.startswith("~$"):
+                continue  # Excel 锁文件
             try:
                 xls = pd.ExcelFile(xlsx_path)
                 if "正式队伍" not in xls.sheet_names:
-                    # DOMjudge 榜单导出: 从 Official 表提取队员
-                    if is_domjudge_format(xls):
-                        for t in read_domjudge_teams(xlsx_path):
+                    # DOMjudge 榜单导出: 从探测到的榜单表提取队员
+                    sheet = domjudge_sheet_name(xls)
+                    if sheet:
+                        for t in read_domjudge_teams(xlsx_path, sheet):
                             for member in t["members"]:
                                 pairs.add((t["school"], member))
                     continue

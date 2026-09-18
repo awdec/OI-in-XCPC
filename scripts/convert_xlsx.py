@@ -347,7 +347,8 @@ def process_year(year_dir):
     print(f"处理 {year} 年数据")
     print(f"{'='*50}")
 
-    xlsx_files = sorted(year_dir.glob("*.xlsx"))
+    # 跳过 Excel 锁文件（源文件正被 Excel 打开时出现的 ~$ 临时文件）
+    xlsx_files = sorted(p for p in year_dir.glob("*.xlsx") if not p.name.startswith("~$"))
     if not xlsx_files:
         print(f"警告: {year} 目录下未找到 xlsx 文件")
         return []
