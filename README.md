@@ -119,8 +119,7 @@ npm run build
 │   │   ├── components/           # 组件
 │   │   │   ├── RankTable.vue     # 排名表格
 │   │   │   ├── TeamDetail.vue    # 队伍详情弹窗
-│   │   │   ├── SchoolStats.vue   # 学校统计图表
-│   │   │   └── ProblemHeatmap.vue # 题目热力图
+│   │   │   └── SchoolStats.vue   # 学校统计图表
 │   │   ├── utils/
 │   │   │   ├── dataLoader.js     # 数据加载（带缓存，支持多年份）
 │   │   │   └── formatters.js     # 解析/聚合工具

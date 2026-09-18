@@ -48,15 +48,6 @@ export function medalText(medal) {
 }
 
 /**
- * 从队伍数据中提取所有学校（去重）
- */
-export function extractSchools(teams) {
-  const set = new Set()
-  teams.forEach(t => { if (t.school) set.add(t.school) })
-  return [...set].sort()
-}
-
-/**
  * 按学校聚合统计
  */
 export function aggregateBySchool(teams) {
