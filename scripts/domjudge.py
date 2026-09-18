@@ -30,20 +30,30 @@ MEDAL_MAP = {
 SOLVED_TOKENS = {"AC", "FB", "OK", "SV"}
 
 
+# DOMjudge 榜单必需的表头列
+DOMJUDGE_REQUIRED_COLS = ("Organization", "Name", "Team Members", "Score", "Time")
+
+
 def _is_header_domjudge(header_values):
     cols = {str(c).strip() for c in header_values if pd.notna(c)}
-    return {"Organization", "Name", "Team Members", "Score"} <= cols
+    return set(DOMJUDGE_REQUIRED_COLS) <= cols
+
+
+def domjudge_sheet_name(xls):
+    """返回 DOMjudge 榜单所在的 sheet 名（Official/Main）；非该格式返回 None。"""
+    if "正式队伍" in xls.sheet_names:
+        return None
+    for name in ("Official", "Main"):
+        if name in xls.sheet_names:
+            df = pd.read_excel(xls, sheet_name=name, header=None, nrows=1)
+            if _is_header_domjudge(df.iloc[0]):
+                return name
+    return None
 
 
 def is_domjudge_format(xls):
     """判断 ExcelFile 是否为 DOMjudge 榜单导出格式（无"正式队伍" sheet）。"""
-    if "正式队伍" in xls.sheet_names:
-        return False
-    for name in ("Official", "Main"):
-        if name in xls.sheet_names:
-            df = pd.read_excel(xls, sheet_name=name, header=None, nrows=1)
-            return _is_header_domjudge(df.iloc[0])
-    return False
+    return domjudge_sheet_name(xls) is not None
 
 
 def _header_map(df):
@@ -112,13 +122,16 @@ def _split_members(raw):
     return [p.strip() for p in str(raw).split(",") if p.strip()]
 
 
-def read_domjudge_teams(xlsx_path, sheet_name="Official", problem_letters=PROBLEM_LETTERS):
+def read_domjudge_teams(xlsx_path, sheet_name, problem_letters=PROBLEM_LETTERS):
     """
-    读取 DOMjudge 榜单的一个 sheet，返回与"正式队伍"原始行等价的中间结构列表:
-    { rank, medal, school, team, members[], solved, penalty, problems }
+    读取 DOMjudge 榜单的一个 sheet（名称由 domjudge_sheet_name 探测），返回与"正式队伍"
+    原始行等价的中间结构列表: { rank, medal, school, team, members[], solved, penalty, problems }
     """
     df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=None)
     cols, problem_cols = _header_map(df)
+    missing = [c for c in DOMJUDGE_REQUIRED_COLS if c not in cols]
+    if missing:
+        raise ValueError(f"{xlsx_path} 的 sheet '{sheet_name}' 缺少必需列: {', '.join(missing)}")
     rank_col = cols.get("#", 0)
     school_col = cols["Organization"]
     team_col = cols["Name"]

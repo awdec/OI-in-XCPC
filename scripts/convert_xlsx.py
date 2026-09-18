@@ -8,11 +8,12 @@
 import os
 import re
 import json
+import sys
 import shutil
 import pandas as pd
 from pathlib import Path
 
-from domjudge import is_domjudge_format, read_domjudge_teams, read_domjudge_girl_teams
+from domjudge import is_domjudge_format, domjudge_sheet_name, read_domjudge_teams, read_domjudge_girl_teams
 
 # 项目根目录
 ROOT = Path(__file__).resolve().parent.parent
@@ -263,12 +264,16 @@ def load_oi_records(year):
 def convert_domjudge_file(xlsx_path, oi_records):
     """
     转换 DOMjudge 榜单导出格式的 xlsx。
-    Official 表 → "正式队伍"，女队表用于 girl 标记，打星队伍不转换（与原格式行为一致）。
+    榜单表（Official/Main）→ "正式队伍"，女队表用于 girl 标记，打星队伍不转换（与原格式行为一致）。
     """
     girl_set = read_domjudge_girl_teams(xlsx_path)
 
+    sheet = domjudge_sheet_name(pd.ExcelFile(xlsx_path))
+    if sheet is None:
+        raise ValueError(f"{xlsx_path}: 未找到 DOMjudge 榜单 sheet (Official/Main)")
+
     teams = []
-    for raw in read_domjudge_teams(xlsx_path):
+    for raw in read_domjudge_teams(xlsx_path, sheet):
         members = []
         for name in raw["members"]:
             key = f"{name}@{raw['school']}"
@@ -291,6 +296,7 @@ def convert_domjudge_file(xlsx_path, oi_records):
             record["medal"] = raw["medal"]
         teams.append(record)
 
+    print(f"  DOMjudge 格式 ({sheet}): {len(teams)} 支队伍")
     return {"正式队伍": teams}
 
 
@@ -328,7 +334,6 @@ def convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records):
             print(f"  {sheet_name}: {len(teams)} 支队伍")
     elif is_domjudge_format(xls):
         result["sheets"] = convert_domjudge_file(xlsx_path, oi_records)
-        print(f"  DOMjudge 格式 (Official): {len(result['sheets']['正式队伍'])} 支队伍")
     else:
         print(f"  警告: 未找到 正式队伍 sheet，也不是 DOMjudge 格式，跳过转换")
 
@@ -336,7 +341,7 @@ def convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records):
 
 
 def process_year(year_dir):
-    """处理单个年份目录。"""
+    """处理单个年份目录。全部 xlsx 转换成功才清理并写入输出；任一失败则该年份不落盘。"""
     year = year_dir.name
     print(f"\n{'='*50}")
     print(f"处理 {year} 年数据")
@@ -347,15 +352,12 @@ def process_year(year_dir):
         print(f"警告: {year} 目录下未找到 xlsx 文件")
         return []
 
-    # 创建年份输出目录
-    year_output = OUTPUT_DIR / year
-    year_output.mkdir(parents=True, exist_ok=True)
-
     # 加载该年份的 OI 记录
     oi_records = load_oi_records(year)
 
-    contests_index = []
-    seen_ids = set()
+    seen_ids = {}
+    converted = []
+    failures = []
 
     for xlsx_path in xlsx_files:
         # 解析文件名获取赛区信息
@@ -370,13 +372,43 @@ def process_year(year_dir):
             org, contest_id, city_cn, name = result
 
         if contest_id in seen_ids:
-            print(f"警告: {xlsx_path.name} 的赛区 id '{contest_id}' 与之前文件重复，输出将相互覆盖")
-        seen_ids.add(contest_id)
+            print(f"错误: {xlsx_path.name} 的赛区 id '{contest_id}' 与 {seen_ids[contest_id]} 重复")
+            failures.append(f"{xlsx_path.name}: 赛区 id '{contest_id}' 与 {seen_ids[contest_id]} 重复")
+            continue
+        seen_ids[contest_id] = xlsx_path.name
 
         print(f"处理: {xlsx_path.name} -> {contest_id}.json")
 
-        data = convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records)
+        try:
+            data = convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records)
+        except Exception as e:
+            print(f"错误: 转换 {xlsx_path.name} 失败: {e}")
+            failures.append(f"{xlsx_path.name}: {e}")
+            continue
 
+        converted.append((contest_id, org, city_cn, name, data))
+
+    if failures:
+        print(f"\n错误: {year} 年有 {len(failures)} 个文件处理失败，本次不写入该年份的任何输出:")
+        for msg in failures:
+            print(f"  - {msg}")
+        return None
+
+    if not converted:
+        print(f"错误: {year} 年没有成功转换任何赛区，不写入任何输出")
+        return None
+
+    # 创建年份输出目录
+    year_output = OUTPUT_DIR / year
+    year_output.mkdir(parents=True, exist_ok=True)
+
+    # 清理旧输出（保留 oi_records.json），使已删除的源文件不再留下孤儿 JSON
+    for old in year_output.glob("*.json"):
+        if old.name != "oi_records.json":
+            old.unlink()
+
+    contests_index = []
+    for contest_id, org, city_cn, name, data in converted:
         # 写入单赛区 JSON
         output_path = year_output / f"{contest_id}.json"
         with open(output_path, "w", encoding="utf-8") as f:
@@ -425,16 +457,23 @@ def main():
 
     print(f"找到年份目录: {[d.name for d in year_dirs]}")
 
-    # 处理每个年份
+    # 处理每个年份；失败的年份不写入任何输出，最后统一报错退出
     all_years = []
+    failed_years = []
     for year_dir in year_dirs:
         contests = process_year(year_dir)
-        if contests:
+        if contests is None:
+            failed_years.append(year_dir.name)
+        elif contests:
             all_years.append({
                 "year": int(year_dir.name),
                 "contest_count": len(contests),
                 "total_teams": sum(c["teams"] for c in contests),
             })
+
+    if failed_years:
+        print(f"\n错误: 以下年份处理失败，未写入任何输出: {', '.join(failed_years)}")
+        sys.exit(1)
 
     # 生成全局 years.json 索引
     years_path = OUTPUT_DIR / "years.json"
