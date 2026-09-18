@@ -18,35 +18,51 @@ const router = useRouter()
 const schoolName = computed(() => decodeURIComponent(route.params.name))
 const allTeams = ref([])
 const loading = ref(true)
+const error = ref('')
 const selectedTeam = ref(null)
 const showTeamDetail = ref(false)
 const schoolTags = ref({ set985: new Set(), set211: new Set() })
 
 const stats = computed(() => {
   const totalSolved = allTeams.value.reduce((s, t) => s + t.solved, 0)
-  const bestRank = Math.min(...allTeams.value.map(t => t.rank || Infinity))
+  const bestRank = allTeams.value.length
+    ? Math.min(...allTeams.value.map(t => t.rank || Infinity))
+    : null
   return { count: allTeams.value.length, totalSolved, bestRank }
 })
 
+let loadSeq = 0
+
 const loadData = async (year) => {
+  const seq = ++loadSeq
   loading.value = true
-  schoolTags.value = await loadSchoolTags()
-  const contests = await loadAllContests(year)
-  const teams = []
-  contests.forEach(c => {
-    const formal = c.sheets['正式队伍'] || []
-    formal.forEach(t => {
-      if (t.school === schoolName.value) {
-        teams.push({ ...t, _contest: c.name })
-      }
+  error.value = ''
+  try {
+    schoolTags.value = await loadSchoolTags()
+    const contests = await loadAllContests(year)
+    const teams = []
+    contests.forEach(c => {
+      const formal = c.sheets['正式队伍'] || []
+      formal.forEach(t => {
+        if (t.school === schoolName.value) {
+          teams.push({ ...t, _contest: c.name })
+        }
+      })
     })
-  })
-  allTeams.value = teams.sort((a, b) => (a.rank || 999) - (b.rank || 999))
-  loading.value = false
+    if (seq !== loadSeq) return
+    allTeams.value = teams.sort((a, b) => (a.rank || 999) - (b.rank || 999))
+  } catch (e) {
+    if (seq !== loadSeq) return
+    console.error('加载学校数据失败:', e)
+    allTeams.value = []
+    error.value = '学校数据加载失败，请稍后重试'
+  } finally {
+    if (seq === loadSeq) loading.value = false
+  }
 }
 
 onMounted(() => loadData(props.year))
-watch(() => route.params.name, () => loadData(props.year))
+watch([() => props.year, () => route.params.name], ([year]) => loadData(year))
 </script>
 
 <template>
@@ -55,11 +71,15 @@ watch(() => route.params.name, () => loadData(props.year))
       <el-icon class="is-loading text-3xl text-blue-500"><Loading /></el-icon>
     </div>
 
+    <div v-else-if="error" class="flex justify-center py-20">
+      <el-result icon="warning" title="加载失败" :sub-title="error" />
+    </div>
+
     <div v-else>
       <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ schoolName }}</h2>
       <div class="flex gap-6 text-sm text-gray-500 mb-6">
         <span>参赛队伍: <b class="text-gray-700">{{ stats.count }}</b></span>
-        <span>最佳排名: <b class="text-green-600">#{{ stats.bestRank }}</b></span>
+        <span>最佳排名: <b class="text-green-600">{{ stats.bestRank != null ? '#' + stats.bestRank : '—' }}</b></span>
       </div>
 
       <el-table

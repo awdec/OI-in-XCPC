@@ -19,51 +19,61 @@ const activeView = ref('icpc')
 const icpcRecords = ref([])
 const oiRecords = ref([])
 const loading = ref(true)
+const error = ref('')
 let loadRequestId = 0
 
 const loadData = async (year, name) => {
   const requestId = ++loadRequestId
   loading.value = true
-  const [contests, oi] = await Promise.all([loadAllContests(year), loadOIRecords(year)])
-  if (requestId !== loadRequestId) return
+  error.value = ''
+  try {
+    const [contests, oi] = await Promise.all([loadAllContests(year), loadOIRecords(year)])
+    if (requestId !== loadRequestId) return
 
-  // ICPC/CCPC 记录
-  const results = []
-  contests.forEach(c => {
-    const teams = c.sheets['正式队伍'] || []
-    teams.forEach(t => {
-      if (t.members.some(m => m.name === name)) {
-        results.push({
-          contest: c.name,
-          contestId: c.id,
-          school: t.school,
-          team: t.team,
-          rank: t.rank,
-          solved: t.solved,
-          penalty: t.penalty,
-          medal: t.medal,
-        })
-      }
+    // ICPC/CCPC 记录
+    const results = []
+    contests.forEach(c => {
+      const teams = c.sheets['正式队伍'] || []
+      teams.forEach(t => {
+        if (t.members.some(m => m.name === name)) {
+          results.push({
+            contest: c.name,
+            contestId: c.id,
+            school: t.school,
+            team: t.team,
+            rank: t.rank,
+            solved: t.solved,
+            penalty: t.penalty,
+            medal: t.medal,
+          })
+        }
+      })
     })
-  })
-  icpcRecords.value = results.sort((a, b) => (a.rank || 999) - (b.rank || 999))
+    icpcRecords.value = results.sort((a, b) => (a.rank || 999) - (b.rank || 999))
 
-  // OI 记录（按 name@school 的 name 部分匹配，按比赛+奖项去重）
-  const seen = new Set()
-  const oiResults = []
-  Object.entries(oi).forEach(([key, records]) => {
-    if (key.split('@')[0] !== name) return
-    records.forEach(r => {
-      const dedupKey = `${r['比赛']}|${r['奖项']}`
-      if (!seen.has(dedupKey)) {
-        seen.add(dedupKey)
-        oiResults.push(r)
-      }
+    // OI 记录（按 name@school 的 name 部分匹配，按比赛+奖项去重）
+    const seen = new Set()
+    const oiResults = []
+    Object.entries(oi).forEach(([key, records]) => {
+      if (key.split('@')[0] !== name) return
+      records.forEach(r => {
+        const dedupKey = `${r['比赛']}|${r['奖项']}`
+        if (!seen.has(dedupKey)) {
+          seen.add(dedupKey)
+          oiResults.push(r)
+        }
+      })
     })
-  })
-  oiRecords.value = oiResults
-
-  loading.value = false
+    oiRecords.value = oiResults
+  } catch (e) {
+    if (requestId !== loadRequestId) return
+    console.error('加载选手数据失败:', e)
+    icpcRecords.value = []
+    oiRecords.value = []
+    error.value = '选手数据加载失败，请稍后重试'
+  } finally {
+    if (requestId === loadRequestId) loading.value = false
+  }
 }
 
 watch(
@@ -79,6 +89,10 @@ watch(
   <div>
     <div v-if="loading" class="flex justify-center py-20">
       <el-icon class="is-loading text-3xl text-blue-500"><Loading /></el-icon>
+    </div>
+
+    <div v-else-if="error" class="flex justify-center py-20">
+      <el-result icon="warning" title="加载失败" :sub-title="error" />
     </div>
 
     <div v-else>

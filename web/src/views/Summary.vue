@@ -15,9 +15,11 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms))
 
 const rows = ref([])
 const loading = ref(true)
+const error = ref('')
 const loadProgress = ref(0)
 const loadTotal = ref(0)
 const schoolTags = ref({ set985: new Set(), set211: new Set() })
+let loadSeq = 0
 
 const PAGE_SIZE = 20
 const currentPage = ref(1)
@@ -119,39 +121,52 @@ const medalClass = (medal) => {
 }
 
 const loadData = async (year) => {
+  const seq = ++loadSeq
   loading.value = true
+  error.value = ''
   loadProgress.value = 0
   rows.value = []
 
-  schoolTags.value = await loadSchoolTags()
-  const index = await loadContestsIndex(year)
-  loadTotal.value = index.length
-  const allData = []
-  for (const c of index) {
-    allData.push(await loadContestData(year, c.id))
-    loadProgress.value++
-    await nextTick()
-    await wait(120)
-  }
-  const result = []
-  for (const contest of allData) {
-    const teams = (contest.sheets['正式队伍'] || [])
-      .slice()
-      .sort((a, b) => medalOrder(a.medal) - medalOrder(b.medal) || (a.rank || 9999) - (b.rank || 9999))
-    for (const t of teams) {
-      result.push({
-        contestName: contest.name,
-        rank: t.rank,
-        school: t.school,
-        team: t.team,
-        members: t.members || [],
-        medal: t.medal,
-        medalOrder: medalOrder(t.medal),
-      })
+  try {
+    schoolTags.value = await loadSchoolTags()
+    const index = await loadContestsIndex(year)
+    if (seq !== loadSeq) return
+    loadTotal.value = index.length
+    const allData = []
+    for (const c of index) {
+      allData.push(await loadContestData(year, c.id))
+      if (seq !== loadSeq) return
+      loadProgress.value++
+      await nextTick()
+      await wait(120)
     }
+    if (seq !== loadSeq) return
+    const result = []
+    for (const contest of allData) {
+      const teams = (contest.sheets['正式队伍'] || [])
+        .slice()
+        .sort((a, b) => medalOrder(a.medal) - medalOrder(b.medal) || (a.rank || 9999) - (b.rank || 9999))
+      for (const t of teams) {
+        result.push({
+          contestName: contest.name,
+          rank: t.rank,
+          school: t.school,
+          team: t.team,
+          members: t.members || [],
+          medal: t.medal,
+          medalOrder: medalOrder(t.medal),
+        })
+      }
+    }
+    rows.value = result
+  } catch (e) {
+    if (seq !== loadSeq) return
+    console.error('加载汇总数据失败:', e)
+    rows.value = []
+    error.value = '数据加载失败，请稍后重试'
+  } finally {
+    if (seq === loadSeq) loading.value = false
   }
-  rows.value = result
-  loading.value = false
 }
 
 onMounted(() => loadData(props.year))
@@ -173,8 +188,12 @@ watch(() => props.year, (newYear) => {
       <p class="text-gray-500 mt-3 text-sm">正在加载比赛数据（{{ loadProgress }} / {{ loadTotal }}）</p>
     </div>
 
+    <div v-else-if="error" class="flex justify-center py-20">
+      <el-result icon="warning" title="加载失败" :sub-title="error" />
+    </div>
+
     <!-- 搜索 + 筛选 -->
-    <div v-if="!loading" class="mb-4">
+    <div v-if="!loading && !error" class="mb-4">
       <div class="flex items-center gap-3 mb-3">
         <div class="w-40 shrink-0">
           <el-input v-model="searchSchool" placeholder="搜索学校" clearable />
@@ -220,7 +239,7 @@ watch(() => props.year, (newYear) => {
     </div>
 
     <el-table
-      v-if="!loading"
+      v-if="!loading && !error"
       :data="currentRows"
       stripe
       border
@@ -306,7 +325,7 @@ watch(() => props.year, (newYear) => {
     </el-table>
 
     <!-- 分页 -->
-    <div v-if="!loading && filteredRows.length" class="flex items-center justify-center gap-2 mt-4 flex-wrap">
+    <div v-if="!loading && !error && filteredRows.length" class="flex items-center justify-center gap-2 mt-4 flex-wrap">
       <span class="text-sm text-gray-500 mr-2">每页 {{ PAGE_SIZE }} 条，共 {{ filteredRows.length }} 条，{{ totalPages }} 页</span>
       <button
         v-for="page in pageButtons"

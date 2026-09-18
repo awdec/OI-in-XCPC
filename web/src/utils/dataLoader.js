@@ -5,12 +5,20 @@
 const cache = {}
 
 /**
+ * fetch + JSON 解析，非 2xx 时抛出带上下文的错误
+ */
+async function fetchJSON(url) {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`加载失败 (${res.status}): ${url}`)
+  return res.json()
+}
+
+/**
  * 加载可用年份列表
  */
 export async function loadYears() {
   if (cache._years) return cache._years
-  const res = await fetch('./data/years.json')
-  cache._years = await res.json()
+  cache._years = await fetchJSON('./data/years.json')
   return cache._years
 }
 
@@ -20,8 +28,7 @@ export async function loadYears() {
 export async function loadContestsIndex(year) {
   const key = `_index_${year}`
   if (cache[key]) return cache[key]
-  const res = await fetch(`./data/${year}/contests.json`)
-  cache[key] = await res.json()
+  cache[key] = await fetchJSON(`./data/${year}/contests.json`)
   return cache[key]
 }
 
@@ -31,8 +38,7 @@ export async function loadContestsIndex(year) {
 export async function loadContestData(year, contestId) {
   const key = `${year}_${contestId}`
   if (cache[key]) return cache[key]
-  const res = await fetch(`./data/${year}/${contestId}.json`)
-  cache[key] = await res.json()
+  cache[key] = await fetchJSON(`./data/${year}/${contestId}.json`)
   return cache[key]
 }
 
@@ -51,8 +57,7 @@ export async function loadAllContests(year) {
 export async function loadOIRecords(year) {
   const key = `_oi_${year}`
   if (cache[key]) return cache[key]
-  const res = await fetch(`./data/${year}/oi_records.json`)
-  cache[key] = await res.json()
+  cache[key] = await fetchJSON(`./data/${year}/oi_records.json`)
   return cache[key]
 }
 
@@ -61,8 +66,10 @@ export async function loadOIRecords(year) {
  */
 export async function loadSchoolTags() {
   if (cache._tags) return cache._tags
-  const [r985, r211] = await Promise.all([fetch('./data/985.json'), fetch('./data/211.json')])
-  const [d985, d211] = await Promise.all([r985.json(), r211.json()])
+  const [d985, d211] = await Promise.all([
+    fetchJSON('./data/985.json'),
+    fetchJSON('./data/211.json'),
+  ])
   cache._tags = { set985: new Set(d985), set211: new Set(d211) }
   return cache._tags
 }

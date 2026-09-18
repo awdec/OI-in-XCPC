@@ -19,6 +19,7 @@ const route = useRoute()
 
 const contest = ref(null)
 const loading = ref(true)
+const error = ref('')
 const searchMember = ref('')
 const searchTeam = ref('')
 const searchSchool = ref('')
@@ -57,15 +58,30 @@ const schoolStats = computed(() => {
   return aggregateBySchool(formal)
 })
 
+let loadSeq = 0
+
 const loadContest = async (year, id) => {
+  const seq = ++loadSeq
   loading.value = true
-  contest.value = await loadContestData(year, id)
-  schoolTags.value = await loadSchoolTags()
-  loading.value = false
+  error.value = ''
+  try {
+    const data = await loadContestData(year, id)
+    const tags = await loadSchoolTags()
+    if (seq !== loadSeq) return
+    contest.value = data
+    schoolTags.value = tags
+  } catch (e) {
+    if (seq !== loadSeq) return
+    console.error('加载赛区数据失败:', e)
+    contest.value = null
+    error.value = '赛区数据加载失败，请稍后重试'
+  } finally {
+    if (seq === loadSeq) loading.value = false
+  }
 }
 
 onMounted(() => loadContest(props.year, route.params.id))
-watch(() => route.params.id, (id) => { if (id) loadContest(props.year, id) })
+watch([() => props.year, () => route.params.id], ([year, id]) => { if (id) loadContest(year, id) })
 
 const openTeamDetail = (team) => {
   selectedTeam.value = team
@@ -76,6 +92,10 @@ const openTeamDetail = (team) => {
 <template>
   <div v-if="loading" class="flex justify-center py-20">
     <el-icon class="is-loading text-3xl text-blue-500"><Loading /></el-icon>
+  </div>
+
+  <div v-else-if="error" class="flex justify-center py-20">
+    <el-result icon="warning" title="加载失败" :sub-title="error" />
   </div>
 
   <div v-else-if="contest">
@@ -139,7 +159,7 @@ const openTeamDetail = (team) => {
 
     <!-- 学校统计 Tab -->
     <div v-if="activeTab === 'schools'">
-      <SchoolStats :stats="schoolStats" />
+      <SchoolStats :stats="schoolStats" :year="year" />
     </div>
 
     <!-- 队伍详情弹窗 -->

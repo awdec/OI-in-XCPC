@@ -10,9 +10,10 @@ use([BarChart, PieChart, GridComponent, TooltipComponent, LegendComponent, DataZ
 
 const props = defineProps({
   stats: { type: Array, default: () => [] },
+  year: { type: String, required: true },
 })
 
-const schoolPath = (name) => `/school/${encodeURIComponent(name)}`
+const schoolPath = (name) => `/${props.year}/school/${encodeURIComponent(name)}`
 
 const topN = ref(20)
 const chartType = ref('bar')
