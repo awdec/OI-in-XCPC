@@ -55,11 +55,9 @@ def is_spring_competition(comp_name):
 def calc_college_year(target_year, comp_year, grade_num, comp_name=''):
     """
     根据比赛年份和年级，推算目标年份的大学年级。
-    毕业年 = comp_year + (12 - grade_num)
+    毕业年 = comp_year + (13 - grade_num)；上半年比赛（WC/APIO/NOI）年级尚未升级，
+    先对 grade_num +1 对齐秋季年级，等价于按 (12 - grade_num) 计算。
     大学年级 = target_year - 毕业年 + 1
-
-    注意：上半年比赛（WC/APIO/NOI）时年级尚未升级，
-    需要 +1 来对齐秋天的年级。
     """
     if is_spring_competition(comp_name):
         grade_num += 1
@@ -112,6 +110,8 @@ def extract_oi_records_for_year(target_year):
                 "年级": grade,
             })
 
+    # 已知取舍：上面 records 仅按姓名聚合，因此跨校同名选手会把同一份 OI 记录
+    # 挂到每所学校的同名选手上（raw.txt 中无唯一身份标识，无法区分）
     result = {}
     matched = 0
     for school, name in players:
