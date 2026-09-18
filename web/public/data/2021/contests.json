@@ -1,18 +1,5 @@
 [
   {
-    "id": "final",
-    "name": "CCPC 总决赛",
-    "org": "CCPC",
-    "city": "总决赛",
-    "teams": 115,
-    "champion": {
-      "school": "清华大学",
-      "team": "盖世汤圆",
-      "solved": 10,
-      "penalty": 1414
-    }
-  },
-  {
     "id": "guangzhou",
     "name": "CCPC 广州",
     "org": "CCPC",
@@ -49,6 +36,19 @@
       "team": "你这题保熟吗",
       "solved": 10,
       "penalty": 1365
+    }
+  },
+  {
+    "id": "final",
+    "name": "CCPC 南京",
+    "org": "CCPC",
+    "city": "南京",
+    "teams": 115,
+    "champion": {
+      "school": "清华大学",
+      "team": "盖世汤圆",
+      "solved": 10,
+      "penalty": 1414
     }
   },
   {

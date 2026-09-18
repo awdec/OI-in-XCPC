@@ -52,6 +52,19 @@
     }
   },
   {
+    "id": "xian",
+    "name": "ICPC 西安",
+    "org": "ICPC",
+    "city": "西安",
+    "teams": 280,
+    "champion": {
+      "school": "北京大学",
+      "team": "赤橙黄绿蓝紫",
+      "solved": 10,
+      "penalty": 1369
+    }
+  },
+  {
     "id": "shanghai",
     "name": "ICPC 上海",
     "org": "ICPC",

@@ -12,6 +12,8 @@ import shutil
 import pandas as pd
 from pathlib import Path
 
+from domjudge import is_domjudge_format, read_domjudge_teams, read_domjudge_girl_teams
+
 # 项目根目录
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT / "web" / "public" / "data"
@@ -59,6 +61,13 @@ CITY_MAP = {
 
 # 中文城市名 → 英文 ID 映射
 CN_TO_ID = {v: k for k, v in CITY_MAP.items()}
+
+# "年份/文件名" → 赛区身份的显式覆盖 (org, contest_id, city_cn, name)。
+# 用于文件名无法自解释的情况。如 2021 年 CCPC 总决赛在南京举办，文件以城市命名，
+# 且同年 ICPC 南京站已占用 id "nanjing"，故保留 id "final" 并将显示名改为城市。
+FILENAME_OVERRIDES = {
+    "2021/ccpc nanjing.xlsx": ("CCPC", "final", "南京", "CCPC 南京"),
+}
 
 
 def parse_submission(raw):
@@ -251,6 +260,40 @@ def load_oi_records(year):
         return json.load(f)
 
 
+def convert_domjudge_file(xlsx_path, oi_records):
+    """
+    转换 DOMjudge 榜单导出格式的 xlsx。
+    Official 表 → "正式队伍"，女队表用于 girl 标记，打星队伍不转换（与原格式行为一致）。
+    """
+    girl_set = read_domjudge_girl_teams(xlsx_path)
+
+    teams = []
+    for raw in read_domjudge_teams(xlsx_path):
+        members = []
+        for name in raw["members"]:
+            key = f"{name}@{raw['school']}"
+            members.append({"name": name, "oi": oi_records.get(key, [])})
+
+        record = {
+            "rank": raw["rank"],
+            "org_rank": None,
+            "school": raw["school"],
+            "team": raw["team"],
+            "solved": raw["solved"],
+            "penalty": raw["penalty"],
+            "problems": raw["problems"],
+            "members": members,
+            "unofficial": False,
+            "girl": (raw["school"], raw["team"]) in girl_set,
+            "icpc_id": None,
+        }
+        if raw["medal"]:
+            record["medal"] = raw["medal"]
+        teams.append(record)
+
+    return {"正式队伍": teams}
+
+
 def convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records):
     """转换单个 xlsx 文件为 JSON。"""
     xls = pd.ExcelFile(xlsx_path)
@@ -262,26 +305,32 @@ def convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records):
         "sheets": {}
     }
 
-    for sheet_name in xls.sheet_names:
-        if sheet_name != "正式队伍":
-            continue
-        df = pd.read_excel(xls, sheet_name=sheet_name, header=1)
-        if len(df) == 0:
-            continue
+    if "正式队伍" in xls.sheet_names:
+        for sheet_name in xls.sheet_names:
+            if sheet_name != "正式队伍":
+                continue
+            df = pd.read_excel(xls, sheet_name=sheet_name, header=1)
+            if len(df) == 0:
+                continue
 
-        problem_cols = detect_problem_columns(df.columns.tolist())
-        has_coaches = "Coaches" in df.columns
+            problem_cols = detect_problem_columns(df.columns.tolist())
+            has_coaches = "Coaches" in df.columns
 
-        teams = []
-        for _, row in df.iterrows():
-            try:
-                team = parse_team(row, problem_cols, has_coaches, oi_records)
-                teams.append(team)
-            except Exception as e:
-                print(f"  警告: 跳过一行 ({sheet_name}): {e}")
+            teams = []
+            for _, row in df.iterrows():
+                try:
+                    team = parse_team(row, problem_cols, has_coaches, oi_records)
+                    teams.append(team)
+                except Exception as e:
+                    print(f"  警告: 跳过一行 ({sheet_name}): {e}")
 
-        result["sheets"][sheet_name] = teams
-        print(f"  {sheet_name}: {len(teams)} 支队伍")
+            result["sheets"][sheet_name] = teams
+            print(f"  {sheet_name}: {len(teams)} 支队伍")
+    elif is_domjudge_format(xls):
+        result["sheets"] = convert_domjudge_file(xlsx_path, oi_records)
+        print(f"  DOMjudge 格式 (Official): {len(result['sheets']['正式队伍'])} 支队伍")
+    else:
+        print(f"  警告: 未找到 正式队伍 sheet，也不是 DOMjudge 格式，跳过转换")
 
     return result
 
@@ -306,15 +355,24 @@ def process_year(year_dir):
     oi_records = load_oi_records(year)
 
     contests_index = []
+    seen_ids = set()
 
     for xlsx_path in xlsx_files:
         # 解析文件名获取赛区信息
-        result = parse_contest_filename(xlsx_path.name)
-        if result is None:
-            print(f"跳过: {xlsx_path.name} (无法解析赛区)")
-            continue
+        override_key = f"{year}/{xlsx_path.name}"
+        if override_key in FILENAME_OVERRIDES:
+            org, contest_id, city_cn, name = FILENAME_OVERRIDES[override_key]
+        else:
+            result = parse_contest_filename(xlsx_path.name)
+            if result is None:
+                print(f"跳过: {xlsx_path.name} (无法解析赛区)")
+                continue
+            org, contest_id, city_cn, name = result
 
-        org, contest_id, city_cn, name = result
+        if contest_id in seen_ids:
+            print(f"警告: {xlsx_path.name} 的赛区 id '{contest_id}' 与之前文件重复，输出将相互覆盖")
+        seen_ids.add(contest_id)
+
         print(f"处理: {xlsx_path.name} -> {contest_id}.json")
 
         data = convert_file(xlsx_path, contest_id, org, city_cn, name, oi_records)

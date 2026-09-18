@@ -1,9 +1,9 @@
 [
   {
-    "id": "final",
-    "name": "CCPC 总决赛",
+    "id": "chengdu",
+    "name": "CCPC 成都",
     "org": "CCPC",
-    "city": "总决赛",
+    "city": "成都",
     "teams": 127,
     "champion": {
       "school": "清华大学",
@@ -65,10 +65,10 @@
     }
   },
   {
-    "id": "final",
-    "name": "ICPC 总决赛",
+    "id": "shanghai",
+    "name": "ICPC 上海",
     "org": "ICPC",
-    "city": "总决赛",
+    "city": "上海",
     "teams": 280,
     "champion": {
       "school": "清华大学",
