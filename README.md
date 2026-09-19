@@ -53,13 +53,13 @@ npm run dev
 
 ### Windows 桌面启动
 
-在项目根目录运行以下命令创建桌面上的 **OI in XCPC** 快捷方式：
+在项目根目录运行以下命令创建桌面上的 **XCPCAtlas** 快捷方式：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-desktop-shortcut.ps1
 ```
 
-双击快捷方式会显示服务终端，并打开 `http://127.0.0.1:11451/OI-in-XCPC/`。关闭该终端窗口或按 `Ctrl+C` 即可停止服务；仅关闭浏览器不会停止服务。需要已安装 Node.js 且已在 `web` 中运行 `npm install`；重复点击会复用已有服务，请通过最初的服务终端关闭应用。端口被其他程序占用时会提示错误。移动项目目录后，重新执行上述命令即可更新快捷方式。
+双击快捷方式会显示服务终端，并打开 `http://127.0.0.1:11451/XCPCAtlas/`。关闭该终端窗口或按 `Ctrl+C` 即可停止服务；仅关闭浏览器不会停止服务。需要已安装 Node.js 且已在 `web` 中运行 `npm install`；重复点击会复用已有服务，请通过最初的服务终端关闭应用。端口被其他程序占用时会提示错误。移动项目目录后，重新执行上述命令即可更新快捷方式。
 
 桌面及标签页采用统一的蓝底金色奖杯图标，文件位于 `web/public/`。修改 `scripts/create_icons.py` 后可运行 `python scripts/create_icons.py` 重新生成（需要 Pillow）。
 
