@@ -1,8 +1,8 @@
 [
   {
     "year": 2020,
-    "contest_count": 9,
-    "total_teams": 3762
+    "contest_count": 10,
+    "total_teams": 3877
   },
   {
     "year": 2021,
@@ -11,8 +11,8 @@
   },
   {
     "year": 2022,
-    "contest_count": 10,
-    "total_teams": 3992
+    "contest_count": 12,
+    "total_teams": 4512
   },
   {
     "year": 2023,
@@ -21,12 +21,12 @@
   },
   {
     "year": 2024,
-    "contest_count": 11,
-    "total_teams": 3492
+    "contest_count": 12,
+    "total_teams": 3614
   },
   {
     "year": 2025,
-    "contest_count": 11,
-    "total_teams": 3551
+    "contest_count": 12,
+    "total_teams": 3683
   }
 ]

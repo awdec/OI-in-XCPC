@@ -13,6 +13,19 @@
     }
   },
   {
+    "id": "final",
+    "name": "CCPC 广州",
+    "org": "CCPC",
+    "city": "广州",
+    "teams": 122,
+    "champion": {
+      "school": "北京大学",
+      "team": "赤橙黄绿蓝紫",
+      "solved": 10,
+      "penalty": 1334
+    }
+  },
+  {
     "id": "haerbin",
     "name": "CCPC 哈尔滨",
     "org": "CCPC",

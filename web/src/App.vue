@@ -15,6 +15,7 @@ const yearNavItems = computed(() => {
     { path: `/${currentYear.value}/`, label: '赛区列表', icon: '🏠' },
     { path: `/${currentYear.value}/summary`, label: '全部成绩', icon: '📊' },
     { path: `/${currentYear.value}/players`, label: '选手成绩', icon: '👤' },
+    { path: `/${currentYear.value}/analysis`, label: '数据分析', icon: '📈' },
   ]
 })
 

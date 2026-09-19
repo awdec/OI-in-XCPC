@@ -14,6 +14,7 @@
 - **选手详情** — 选手参赛记录与 OI 获奖经历
 - **公告** — 静态公告页面
 - **队伍详情** — 题目提交状态、队员信息、奖牌
+- **数据分析** — 年度统计分析：总览与各赛区奖牌分布、赛站获奖人数与跨赛站获奖迁移、选手获奖分布、参赛场次与获奖率、排名稳定性、各奖牌档 OIer 占比与队伍构成、金牌选手最高 OI 奖项分布（逐站）、学校层次获奖率与 OIer 率
 - **OI 标记** — 有 OI 获奖记录的选手显示 ☀️ 标记，悬停查看获奖详情
 - **新标签页打开** — 所有导航链接支持 Ctrl+点击 / 鼠标中键在新标签页打开
 
@@ -48,7 +49,7 @@ npm install
 npm run dev
 ```
 
-浏览器打开 http://localhost:5173/
+浏览器打开 http://localhost:11451/
 
 ### Windows 桌面启动
 
@@ -58,7 +59,7 @@ npm run dev
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-desktop-shortcut.ps1
 ```
 
-双击快捷方式会显示服务终端，并打开 `http://127.0.0.1:5173/OI-in-XCPC/`。关闭该终端窗口或按 `Ctrl+C` 即可停止服务；仅关闭浏览器不会停止服务。需要已安装 Node.js 且已在 `web` 中运行 `npm install`；重复点击会复用已有服务，请通过最初的服务终端关闭应用。端口被其他程序占用时会提示错误。移动项目目录后，重新执行上述命令即可更新快捷方式。
+双击快捷方式会显示服务终端，并打开 `http://127.0.0.1:11451/OI-in-XCPC/`。关闭该终端窗口或按 `Ctrl+C` 即可停止服务；仅关闭浏览器不会停止服务。需要已安装 Node.js 且已在 `web` 中运行 `npm install`；重复点击会复用已有服务，请通过最初的服务终端关闭应用。端口被其他程序占用时会提示错误。移动项目目录后，重新执行上述命令即可更新快捷方式。
 
 桌面及标签页采用统一的蓝底金色奖杯图标，文件位于 `web/public/`。修改 `scripts/create_icons.py` 后可运行 `python scripts/create_icons.py` 重新生成（需要 Pillow）。
 
@@ -83,8 +84,7 @@ npm run build
 ├── scripts/
 │   ├── convert_xlsx.py          # xlsx → JSON 主脚本（支持多年份）
 │   ├── extract_players.py       # 提取选手列表
-│   └── extract_oi_records.py    # 匹配 OI 记录（按年份）
-├── xcpc/
+│   └── extract_oi_records.py    # 匹配 OI 记录（按年份）├── xcpc/
 │   ├── 2020/                    # 2020 赛季原始成绩文件
 │   ├── 2021/                    # 待补充
 │   ├── 2022/                    # 待补充
@@ -113,15 +113,24 @@ npm run build
 │   │   │   ├── YearHome.vue      # 年份首页（赛区列表）
 │   │   │   ├── Contest.vue       # 赛区详情
 │   │   │   ├── Summary.vue       # 全部成绩汇总
+│   │   │   ├── Analysis.vue      # 数据分析（按年份）
 │   │   │   ├── School.vue        # 学校详情
 │   │   │   ├── Player.vue        # 选手详情
 │   │   │   └── Announcement.vue  # 公告
-│   │   ├── components/           # 组件
+│   │   ├── components/
 │   │   │   ├── RankTable.vue     # 排名表格
 │   │   │   ├── TeamDetail.vue    # 队伍详情弹窗
-│   │   │   └── SchoolStats.vue   # 学校统计图表
+│   │   │   ├── SchoolStats.vue   # 学校统计图表
+│   │   │   └── analysis/         # 数据分析页图表组件
+│   │   │       ├── AnalysisChart.vue  # ECharts 通用封装
+│   │   │       ├── OverviewTab.vue    # 总览
+│   │   │       ├── RegionTab.vue      # 赛站分析
+│   │   │       ├── PlayersTab.vue     # 选手分析
+│   │   │       ├── OIerTab.vue        # OIer 分析
+│   │   │       └── SchoolTab.vue      # 学校分析
 │   │   ├── utils/
 │   │   │   ├── dataLoader.js     # 数据加载（带缓存，支持多年份）
+│   │   │   ├── analysis.js       # 数据分析统计（纯函数）
 │   │   │   └── formatters.js     # 解析/聚合工具
 │   │   ├── App.vue               # 根组件（导航栏）
 │   │   └── main.js               # 入口（路由 + Element Plus）

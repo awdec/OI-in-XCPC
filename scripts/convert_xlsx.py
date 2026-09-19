@@ -27,6 +27,7 @@ CITY_MAP = {
     "kunming": "昆明",
     "jinan": "济南",
     "nanjing": "南京",
+    "nanyang": "南阳",
     "shanghai": "上海",
     "shenyang": "沈阳",
     "beijing": "北京",
@@ -64,10 +65,15 @@ CITY_MAP = {
 CN_TO_ID = {v: k for k, v in CITY_MAP.items()}
 
 # "年份/文件名" → 赛区身份的显式覆盖 (org, contest_id, city_cn, name)。
-# 用于文件名无法自解释的情况。如 2021 年 CCPC 总决赛在南京举办，文件以城市命名，
-# 且同年 ICPC 南京站已占用 id "nanjing"，故保留 id "final" 并将显示名改为城市。
+# 用于文件名无法自解释的情况。如 2020/2021/2024 年 CCPC 总决赛以举办城市命名
+# （分站赛齐备 + 总决赛规模的队伍数可辨认为总决赛），故保留 id "final" 并将显示名改为城市。
+# 2022 年总决赛以 "ccpc final" 命名但举办地同样在广州，且同年已有 id "guangzhou"
+# 的普通分站，显示名加"（总决赛）"后缀消歧义。
 FILENAME_OVERRIDES = {
+    "2020/ccpc beijing.xlsx": ("CCPC", "final", "北京", "CCPC 北京"),
     "2021/ccpc nanjing.xlsx": ("CCPC", "final", "南京", "CCPC 南京"),
+    "2022/ccpc final.xlsx": ("CCPC", "final", "广州", "CCPC 广州（总决赛）"),
+    "2024/ccpc guangzhou.xlsx": ("CCPC", "final", "广州", "CCPC 广州"),
 }
 
 
@@ -281,7 +287,7 @@ def convert_domjudge_file(xlsx_path, oi_records):
 
         record = {
             "rank": raw["rank"],
-            "org_rank": None,
+            "org_rank": raw["org_rank"],
             "school": raw["school"],
             "team": raw["team"],
             "solved": raw["solved"],
@@ -294,6 +300,8 @@ def convert_domjudge_file(xlsx_path, oi_records):
         }
         if raw["medal"]:
             record["medal"] = raw["medal"]
+        if raw["coaches"]:
+            record["coaches"] = raw["coaches"]
         teams.append(record)
 
     print(f"  DOMjudge 格式 ({sheet}): {len(teams)} 支队伍")
@@ -348,7 +356,12 @@ def process_year(year_dir):
     print(f"{'='*50}")
 
     # 跳过 Excel 锁文件（源文件正被 Excel 打开时出现的 ~$ 临时文件）
-    xlsx_files = sorted(p for p in year_dir.glob("*.xlsx") if not p.name.startswith("~$"))
+    # 文件名字典序决定赛区在列表中的显示顺序；忽略大小写，使小写命名（如 "2025 ccpc nanyang"）
+    # 与同类命名相邻，而不是按 ASCII 排到全部大写命名之后
+    xlsx_files = sorted(
+        (p for p in year_dir.glob("*.xlsx") if not p.name.startswith("~$")),
+        key=lambda p: p.name.lower(),
+    )
     if not xlsx_files:
         print(f"警告: {year} 目录下未找到 xlsx 文件")
         return []

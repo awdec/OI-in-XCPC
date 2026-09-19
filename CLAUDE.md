@@ -10,7 +10,7 @@ ICPC/CCPC contest results visualization platform supporting multiple years (2020
 
 ### Frontend (run from `web/`)
 ```bash
-npm run dev       # Vite dev server on localhost:5173
+npm run dev       # Vite dev server on localhost:11451
 npm run build     # Production build to web/dist/
 npm run preview   # Preview production build
 ```

@@ -2,7 +2,7 @@ param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $webRoot = Join-Path $projectRoot 'web'
-$port = 5173
+$port = 11451
 $url = "http://127.0.0.1:$port/OI-in-XCPC/"
 
 try {

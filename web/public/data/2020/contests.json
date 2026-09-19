@@ -1,5 +1,18 @@
 [
   {
+    "id": "final",
+    "name": "CCPC 北京",
+    "org": "CCPC",
+    "city": "北京",
+    "teams": 115,
+    "champion": {
+      "school": "清华大学",
+      "team": "三个顶俩",
+      "solved": 11,
+      "penalty": 1340
+    }
+  },
+  {
     "id": "changchun",
     "name": "CCPC 长春",
     "org": "CCPC",

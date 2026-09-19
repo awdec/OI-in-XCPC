@@ -39,6 +39,19 @@
     }
   },
   {
+    "id": "nanyang",
+    "name": "CCPC 南阳",
+    "org": "CCPC",
+    "city": "南阳",
+    "teams": 132,
+    "champion": {
+      "school": "北京大学",
+      "team": "不渡轮回",
+      "solved": 7,
+      "penalty": 1122
+    }
+  },
+  {
     "id": "zhengzhou",
     "name": "CCPC 郑州",
     "org": "CCPC",

@@ -7,7 +7,7 @@
     "正式队伍": [
       {
         "rank": 1,
-        "org_rank": null,
+        "org_rank": 1,
         "school": "北京大学",
         "team": "赤橙黄绿蓝紫",
         "solved": 10,
@@ -260,7 +260,7 @@
       },
       {
         "rank": 2,
-        "org_rank": null,
+        "org_rank": 2,
         "school": "清华大学",
         "team": "一路向北",
         "solved": 9,
@@ -1040,7 +1040,7 @@
       },
       {
         "rank": 4,
-        "org_rank": null,
+        "org_rank": 3,
         "school": "浙江大学",
         "team": "十发罚时",
         "solved": 8,
@@ -2000,7 +2000,7 @@
       },
       {
         "rank": 7,
-        "org_rank": null,
+        "org_rank": 4,
         "school": "北京交通大学",
         "team": "羊羊羊",
         "solved": 7,
@@ -2779,7 +2779,7 @@
       },
       {
         "rank": 10,
-        "org_rank": null,
+        "org_rank": 5,
         "school": "中国科学技术大学",
         "team": "丝路市西套村代表队",
         "solved": 7,
@@ -3067,7 +3067,7 @@
       },
       {
         "rank": 11,
-        "org_rank": null,
+        "org_rank": 6,
         "school": "哈尔滨工业大学",
         "team": "蓬莱人形",
         "solved": 7,
@@ -3253,7 +3253,7 @@
       },
       {
         "rank": 12,
-        "org_rank": null,
+        "org_rank": 7,
         "school": "南京航空航天大学",
         "team": "错误",
         "solved": 7,
@@ -3505,7 +3505,7 @@
       },
       {
         "rank": 13,
-        "org_rank": null,
+        "org_rank": 8,
         "school": "中山大学",
         "team": "中山大学_没有想法",
         "solved": 6,
@@ -3823,7 +3823,7 @@
       },
       {
         "rank": 14,
-        "org_rank": null,
+        "org_rank": 9,
         "school": "北京理工大学",
         "team": "越野",
         "solved": 6,
@@ -3923,7 +3923,7 @@
       },
       {
         "rank": 15,
-        "org_rank": null,
+        "org_rank": 10,
         "school": "北京航空航天大学",
         "team": "秋花追忆",
         "solved": 6,
@@ -4121,7 +4121,7 @@
       },
       {
         "rank": 16,
-        "org_rank": null,
+        "org_rank": 11,
         "school": "南方科技大学",
         "team": "南方科技大学-奥斯陆",
         "solved": 6,
@@ -4607,7 +4607,7 @@
       },
       {
         "rank": 17,
-        "org_rank": null,
+        "org_rank": 12,
         "school": "厦门大学",
         "team": "闪光春日影",
         "solved": 6,
@@ -4835,7 +4835,7 @@
       },
       {
         "rank": 18,
-        "org_rank": null,
+        "org_rank": 13,
         "school": "华中科技大学",
         "team": "邹知秋你昆明这么出题就是不想出线",
         "solved": 6,
@@ -4991,7 +4991,7 @@
       },
       {
         "rank": 19,
-        "org_rank": null,
+        "org_rank": 14,
         "school": "上海大学",
         "team": "树上的忍者",
         "solved": 6,
@@ -5549,7 +5549,7 @@
       },
       {
         "rank": 21,
-        "org_rank": null,
+        "org_rank": 15,
         "school": "香港中文大学",
         "team": "簽到失敗",
         "solved": 6,
@@ -6267,7 +6267,7 @@
       },
       {
         "rank": 24,
-        "org_rank": null,
+        "org_rank": 16,
         "school": "上海交通大学",
         "team": "夏日影",
         "solved": 6,
@@ -6531,7 +6531,7 @@
       },
       {
         "rank": 25,
-        "org_rank": null,
+        "org_rank": 17,
         "school": "西安交通大学",
         "team": "宇宙将为你闪烁",
         "solved": 6,
@@ -6692,7 +6692,7 @@
       },
       {
         "rank": 26,
-        "org_rank": null,
+        "org_rank": 18,
         "school": "香港中文大学（深圳）",
         "team": "通顶雪道",
         "solved": 6,
@@ -6938,7 +6938,7 @@
       },
       {
         "rank": 27,
-        "org_rank": null,
+        "org_rank": 19,
         "school": "电子科技大学",
         "team": "UESTC_篝月明火",
         "solved": 6,
@@ -7135,7 +7135,7 @@
       },
       {
         "rank": 28,
-        "org_rank": null,
+        "org_rank": 20,
         "school": "中南大学",
         "team": "有刺无刺",
         "solved": 6,
@@ -8742,7 +8742,7 @@
       },
       {
         "rank": 33,
-        "org_rank": null,
+        "org_rank": 21,
         "school": "杭州电子科技大学",
         "team": "杭电1队",
         "solved": 6,
@@ -9012,7 +9012,7 @@
       },
       {
         "rank": 34,
-        "org_rank": null,
+        "org_rank": 22,
         "school": "西南交通大学",
         "team": "我都行",
         "solved": 5,
@@ -9166,7 +9166,7 @@
       },
       {
         "rank": 35,
-        "org_rank": null,
+        "org_rank": 23,
         "school": "香港城市大学",
         "team": "初心",
         "solved": 5,
@@ -9266,7 +9266,7 @@
       },
       {
         "rank": 36,
-        "org_rank": null,
+        "org_rank": 24,
         "school": "武汉大学",
         "team": "秘封俱乐部",
         "solved": 5,
@@ -9409,7 +9409,7 @@
       },
       {
         "rank": 37,
-        "org_rank": null,
+        "org_rank": 25,
         "school": "北京邮电大学",
         "team": "摩可彭塔斯",
         "solved": 5,
@@ -10621,7 +10621,7 @@
       },
       {
         "rank": 41,
-        "org_rank": null,
+        "org_rank": 26,
         "school": "南京大学",
         "team": "食堂难民走线和园卖花",
         "solved": 5,
@@ -11363,7 +11363,7 @@
       },
       {
         "rank": 45,
-        "org_rank": null,
+        "org_rank": 27,
         "school": "南京理工大学",
         "team": "你怎么知道鲍汁锅在22ec抽到了mate50pro",
         "solved": 5,
@@ -11685,7 +11685,7 @@
       },
       {
         "rank": 47,
-        "org_rank": null,
+        "org_rank": 28,
         "school": "中国人民大学",
         "team": "森林冰火人",
         "solved": 5,
@@ -12001,7 +12001,7 @@
       },
       {
         "rank": 49,
-        "org_rank": null,
+        "org_rank": 29,
         "school": "苏州大学",
         "team": "故障机器人",
         "solved": 5,
@@ -12301,7 +12301,7 @@
       },
       {
         "rank": 50,
-        "org_rank": null,
+        "org_rank": 30,
         "school": "兰州大学",
         "team": "两个出生",
         "solved": 5,
@@ -13975,7 +13975,7 @@
       },
       {
         "rank": 57,
-        "org_rank": null,
+        "org_rank": 31,
         "school": "天津大学",
         "team": "锐刻没有电",
         "solved": 5,
@@ -14075,7 +14075,7 @@
       },
       {
         "rank": 58,
-        "org_rank": null,
+        "org_rank": 32,
         "school": "中国科学院大学",
         "team": "果壳挂科王",
         "solved": 5,
@@ -14255,7 +14255,7 @@
       },
       {
         "rank": 59,
-        "org_rank": null,
+        "org_rank": 33,
         "school": "四川大学",
         "team": "难题逆转小队",
         "solved": 5,
@@ -14403,7 +14403,7 @@
       },
       {
         "rank": 60,
-        "org_rank": null,
+        "org_rank": 34,
         "school": "西南大学",
         "team": "AutoC++",
         "solved": 5,
@@ -14559,7 +14559,7 @@
       },
       {
         "rank": 61,
-        "org_rank": null,
+        "org_rank": 35,
         "school": "哈尔滨工业大学（深圳）",
         "team": "潜水小怪",
         "solved": 5,
@@ -15501,7 +15501,7 @@
       },
       {
         "rank": 65,
-        "org_rank": null,
+        "org_rank": 36,
         "school": "国防科技大学",
         "team": "蓝色空间号",
         "solved": 5,
@@ -16366,7 +16366,7 @@
       },
       {
         "rank": 69,
-        "org_rank": null,
+        "org_rank": 37,
         "school": "东北大学",
         "team": "东北大学_远陬浮萍",
         "solved": 4,
@@ -16539,7 +16539,7 @@
       },
       {
         "rank": 70,
-        "org_rank": null,
+        "org_rank": 38,
         "school": "华中师范大学",
         "team": "落月摇情满江树",
         "solved": 4,
@@ -16670,7 +16670,7 @@
       },
       {
         "rank": 71,
-        "org_rank": null,
+        "org_rank": 39,
         "school": "复旦大学",
         "team": "学海无涯，回头是岸",
         "solved": 4,
@@ -16970,7 +16970,7 @@
       },
       {
         "rank": 72,
-        "org_rank": null,
+        "org_rank": 40,
         "school": "福州大学",
         "team": "从今天起不当小丑",
         "solved": 4,
@@ -17637,7 +17637,7 @@
       },
       {
         "rank": 76,
-        "org_rank": null,
+        "org_rank": 41,
         "school": "华东师范大学",
         "team": "至此，一锤定音",
         "solved": 4,
@@ -17805,7 +17805,7 @@
       },
       {
         "rank": 77,
-        "org_rank": null,
+        "org_rank": 42,
         "school": "浙江理工大学",
         "team": "炉石新晋肺癌一哥......堂堂连载",
         "solved": 4,
@@ -18571,7 +18571,7 @@
       },
       {
         "rank": 81,
-        "org_rank": null,
+        "org_rank": 43,
         "school": "西北工业大学",
         "team": "D.D.D",
         "solved": 4,
@@ -19037,7 +19037,7 @@
       },
       {
         "rank": 84,
-        "org_rank": null,
+        "org_rank": 44,
         "school": "上海理工大学",
         "team": "蔡光（囯內）",
         "solved": 4,
@@ -19698,7 +19698,7 @@
       },
       {
         "rank": 88,
-        "org_rank": null,
+        "org_rank": 45,
         "school": "哈尔滨工程大学",
         "team": "我推的七海爆吃0721次罚时因为在原神启动",
         "solved": 4,
@@ -19848,7 +19848,7 @@
       },
       {
         "rank": 89,
-        "org_rank": null,
+        "org_rank": 46,
         "school": "河海大学",
         "team": "我的acm铁牌物语果然有问题",
         "solved": 4,
@@ -20009,7 +20009,7 @@
       },
       {
         "rank": 90,
-        "org_rank": null,
+        "org_rank": 47,
         "school": "浙大城市学院",
         "team": "扫雷爱好者",
         "solved": 4,
@@ -20102,7 +20102,7 @@
       },
       {
         "rank": 91,
-        "org_rank": null,
+        "org_rank": 48,
         "school": "郑州大学",
         "team": "都不玩原神",
         "solved": 4,
@@ -20424,7 +20424,7 @@
       },
       {
         "rank": 93,
-        "org_rank": null,
+        "org_rank": 49,
         "school": "西安电子科技大学",
         "team": "三分之二去零点",
         "solved": 4,
@@ -20567,7 +20567,7 @@
       },
       {
         "rank": 94,
-        "org_rank": null,
+        "org_rank": 50,
         "school": "杭州师范大学",
         "team": "春天的草莓和夏天的啤酒花",
         "solved": 4,
@@ -20960,7 +20960,7 @@
       },
       {
         "rank": 96,
-        "org_rank": null,
+        "org_rank": 51,
         "school": "南京邮电大学",
         "team": "内鬼猫猫头",
         "solved": 4,
@@ -21434,7 +21434,7 @@
       },
       {
         "rank": 98,
-        "org_rank": null,
+        "org_rank": 52,
         "school": "大连理工大学",
         "team": "这么六！",
         "solved": 4,
@@ -21584,7 +21584,7 @@
       },
       {
         "rank": 99,
-        "org_rank": null,
+        "org_rank": 53,
         "school": "长沙理工大学",
         "team": "代码不能从这一侧AC",
         "solved": 4,
@@ -21696,7 +21696,7 @@
       },
       {
         "rank": 100,
-        "org_rank": null,
+        "org_rank": 54,
         "school": "山东大学",
         "team": "SDU-TCS",
         "solved": 4,
@@ -21840,7 +21840,7 @@
       },
       {
         "rank": 101,
-        "org_rank": null,
+        "org_rank": 55,
         "school": "华南理工大学",
         "team": "打xcpc不喊我",
         "solved": 4,
@@ -21976,7 +21976,7 @@
       },
       {
         "rank": 101,
-        "org_rank": null,
+        "org_rank": 55,
         "school": "华南师范大学",
         "team": "A了这题就吃麦旋风",
         "solved": 4,
@@ -22137,7 +22137,7 @@
       },
       {
         "rank": 103,
-        "org_rank": null,
+        "org_rank": 57,
         "school": "重庆理工大学",
         "team": "乱",
         "solved": 4,
@@ -22374,7 +22374,7 @@
       },
       {
         "rank": 105,
-        "org_rank": null,
+        "org_rank": 58,
         "school": "东南大学",
         "team": "不休独舞",
         "solved": 4,
@@ -22721,7 +22721,7 @@
       },
       {
         "rank": 107,
-        "org_rank": null,
+        "org_rank": 59,
         "school": "东华大学",
         "team": "不可视境界线",
         "solved": 4,
@@ -22883,7 +22883,7 @@
       },
       {
         "rank": 107,
-        "org_rank": null,
+        "org_rank": 59,
         "school": "湖南大学",
         "team": "123456",
         "solved": 4,
@@ -23357,7 +23357,7 @@
       },
       {
         "rank": 109,
-        "org_rank": null,
+        "org_rank": 61,
         "school": "香港大学",
         "team": "热门流行音乐联盟",
         "solved": 4,
@@ -24163,7 +24163,7 @@
       },
       {
         "rank": 114,
-        "org_rank": null,
+        "org_rank": 62,
         "school": "东北大学秦皇岛分校",
         "team": "名字取好了吗",
         "solved": 4,
@@ -24421,7 +24421,7 @@
       },
       {
         "rank": 115,
-        "org_rank": null,
+        "org_rank": 63,
         "school": "同济大学",
         "team": "于离别之朝束起约定之花",
         "solved": 4,
@@ -24792,7 +24792,7 @@
       },
       {
         "rank": 117,
-        "org_rank": null,
+        "org_rank": 64,
         "school": "湖南师范大学",
         "team": "栀晓",
         "solved": 4,
@@ -24923,7 +24923,7 @@
       },
       {
         "rank": 118,
-        "org_rank": null,
+        "org_rank": 65,
         "school": "杭州电子科技大学信息工程学院",
         "team": "无尽的风之轨迹",
         "solved": 4,
@@ -25245,7 +25245,7 @@
       },
       {
         "rank": 120,
-        "org_rank": null,
+        "org_rank": 66,
         "school": "浙江工业大学",
         "team": "不用见外",
         "solved": 4,
@@ -25338,7 +25338,7 @@
       },
       {
         "rank": 121,
-        "org_rank": null,
+        "org_rank": 67,
         "school": "南京信息工程大学",
         "team": "叱咤月海鱼鱼猫",
         "solved": 4,
@@ -25828,7 +25828,7 @@
       },
       {
         "rank": 125,
-        "org_rank": null,
+        "org_rank": 68,
         "school": "北京师范大学",
         "team": "苹果狗",
         "solved": 4,
@@ -26329,7 +26329,7 @@
       },
       {
         "rank": 128,
-        "org_rank": null,
+        "org_rank": 69,
         "school": "香港科技大学",
         "team": "Firebird Chan Lay Harder",
         "solved": 4,
@@ -26422,7 +26422,7 @@
       },
       {
         "rank": 129,
-        "org_rank": null,
+        "org_rank": 70,
         "school": "西北农林科技大学",
         "team": "不会起名",
         "solved": 4,
@@ -26515,7 +26515,7 @@
       },
       {
         "rank": 130,
-        "org_rank": null,
+        "org_rank": 71,
         "school": "郑州轻工业大学",
         "team": "冰马桶",
         "solved": 4,
@@ -26608,7 +26608,7 @@
       },
       {
         "rank": 131,
-        "org_rank": null,
+        "org_rank": 72,
         "school": "西湖大学",
         "team": "轰炸机数学学院",
         "solved": 4,
@@ -26740,7 +26740,7 @@
       },
       {
         "rank": 132,
-        "org_rank": null,
+        "org_rank": 73,
         "school": "武汉科技大学",
         "team": "RELX悦刻幻影PRO",
         "solved": 4,
@@ -27056,7 +27056,7 @@
       },
       {
         "rank": 134,
-        "org_rank": null,
+        "org_rank": 74,
         "school": "香港科技大学（广州）",
         "team": "ZJJ是赵家杰",
         "solved": 4,
@@ -27572,7 +27572,7 @@
       },
       {
         "rank": 136,
-        "org_rank": null,
+        "org_rank": 75,
         "school": "武汉理工大学",
         "team": "超级奶龙爆爆爆",
         "solved": 4,
@@ -27987,7 +27987,7 @@
       },
       {
         "rank": 139,
-        "org_rank": null,
+        "org_rank": 76,
         "school": "长安大学",
         "team": "长安未央",
         "solved": 4,
@@ -28776,7 +28776,7 @@
       },
       {
         "rank": 143,
-        "org_rank": null,
+        "org_rank": 77,
         "school": "西安理工大学",
         "team": "神秘的力量",
         "solved": 3,
@@ -29245,7 +29245,7 @@
       },
       {
         "rank": 146,
-        "org_rank": null,
+        "org_rank": 78,
         "school": "浙江师范大学",
         "team": "狗运小子",
         "solved": 3,
@@ -29431,7 +29431,7 @@
       },
       {
         "rank": 148,
-        "org_rank": null,
+        "org_rank": 79,
         "school": "上海科技大学",
         "team": "耐撞王：牢然",
         "solved": 3,
@@ -29665,7 +29665,7 @@
       },
       {
         "rank": 149,
-        "org_rank": null,
+        "org_rank": 80,
         "school": "西北大学",
         "team": "剑舞者",
         "solved": 3,
@@ -29955,7 +29955,7 @@
       },
       {
         "rank": 151,
-        "org_rank": null,
+        "org_rank": 81,
         "school": "山东大学（威海）",
         "team": "唐可可后援会后援会",
         "solved": 3,
@@ -30381,7 +30381,7 @@
       },
       {
         "rank": 153,
-        "org_rank": null,
+        "org_rank": 82,
         "school": "吉林大学",
         "team": "断桥雪",
         "solved": 3,
@@ -30879,7 +30879,7 @@
       },
       {
         "rank": 155,
-        "org_rank": null,
+        "org_rank": 83,
         "school": "重庆大学",
         "team": "不考计算几何就摆烂",
         "solved": 3,
@@ -31524,7 +31524,7 @@
       },
       {
         "rank": 159,
-        "org_rank": null,
+        "org_rank": 84,
         "school": "燕山大学",
         "team": "塔山之巅",
         "solved": 3,
@@ -31898,7 +31898,7 @@
       },
       {
         "rank": 162,
-        "org_rank": null,
+        "org_rank": 85,
         "school": "南开大学",
         "team": "难开题开题难",
         "solved": 3,
@@ -32520,7 +32520,7 @@
       },
       {
         "rank": 165,
-        "org_rank": null,
+        "org_rank": 86,
         "school": "福建师范大学",
         "team": "杰尼龟快使用飞叶快刀",
         "solved": 3,
@@ -32638,7 +32638,7 @@
       },
       {
         "rank": 166,
-        "org_rank": null,
+        "org_rank": 87,
         "school": "广东以色列理工学院",
         "team": "一纸繁鸢",
         "solved": 3,
@@ -32835,7 +32835,7 @@
       },
       {
         "rank": 167,
-        "org_rank": null,
+        "org_rank": 88,
         "school": "哈尔滨工业大学（威海）",
         "team": "帅比队长征到婚了QQ[已隐藏]",
         "solved": 3,
@@ -32997,7 +32997,7 @@
       },
       {
         "rank": 168,
-        "org_rank": null,
+        "org_rank": 89,
         "school": "昆山杜克大学",
         "team": "哦豁",
         "solved": 3,
@@ -33249,7 +33249,7 @@
       },
       {
         "rank": 169,
-        "org_rank": null,
+        "org_rank": 90,
         "school": "中国地质大学（北京）",
         "team": "玩机械动力玩的",
         "solved": 3,
@@ -34028,7 +34028,7 @@
       },
       {
         "rank": 173,
-        "org_rank": null,
+        "org_rank": 91,
         "school": "中国民航大学",
         "team": "四渡赤水",
         "solved": 3,
@@ -35713,7 +35713,7 @@
       },
       {
         "rank": 183,
-        "org_rank": null,
+        "org_rank": 92,
         "school": "新疆大学",
         "team": "胡杨春信",
         "solved": 3,
@@ -35805,7 +35805,7 @@
       },
       {
         "rank": 184,
-        "org_rank": null,
+        "org_rank": 93,
         "school": "香港理工大学",
         "team": "马",
         "solved": 3,
@@ -36174,7 +36174,7 @@
       },
       {
         "rank": 186,
-        "org_rank": null,
+        "org_rank": 94,
         "school": "广东工业大学",
         "team": "演奏春日影",
         "solved": 3,
@@ -36425,7 +36425,7 @@
       },
       {
         "rank": 187,
-        "org_rank": null,
+        "org_rank": 95,
         "school": "河南农业大学",
         "team": "千夜浮梦",
         "solved": 3,
@@ -36893,7 +36893,7 @@
       },
       {
         "rank": 190,
-        "org_rank": null,
+        "org_rank": 96,
         "school": "长沙学院",
         "team": "冲冲冲",
         "solved": 3,
@@ -36985,7 +36985,7 @@
       },
       {
         "rank": 191,
-        "org_rank": null,
+        "org_rank": 97,
         "school": "浙江万里学院",
         "team": "MikuFans",
         "solved": 3,
@@ -37286,7 +37286,7 @@
       },
       {
         "rank": 193,
-        "org_rank": null,
+        "org_rank": 98,
         "school": "山东理工大学",
         "team": "清纯白毛小萝莉",
         "solved": 3,
@@ -37665,7 +37665,7 @@
       },
       {
         "rank": 195,
-        "org_rank": null,
+        "org_rank": 99,
         "school": "华南农业大学",
         "team": "14个铜牌能打EC Final，真的假的？",
         "solved": 3,
@@ -37954,7 +37954,7 @@
       },
       {
         "rank": 197,
-        "org_rank": null,
+        "org_rank": 100,
         "school": "湖南理工学院",
         "team": "流泪猫猫头",
         "solved": 3,
@@ -38672,7 +38672,7 @@
       },
       {
         "rank": 201,
-        "org_rank": null,
+        "org_rank": 101,
         "school": "湘潭大学",
         "team": "海之霸",
         "solved": 3,
@@ -39333,7 +39333,7 @@
       },
       {
         "rank": 204,
-        "org_rank": null,
+        "org_rank": 102,
         "school": "北京林业大学",
         "team": "上林花似锦",
         "solved": 3,
@@ -41042,7 +41042,7 @@
       },
       {
         "rank": 214,
-        "org_rank": null,
+        "org_rank": 103,
         "school": "山东科技大学",
         "team": "柏林号",
         "solved": 2,
@@ -41699,7 +41699,7 @@
       },
       {
         "rank": 218,
-        "org_rank": null,
+        "org_rank": 104,
         "school": "江苏大学",
         "team": "扫一遍就过了",
         "solved": 2,
@@ -42050,7 +42050,7 @@
       },
       {
         "rank": 220,
-        "org_rank": null,
+        "org_rank": 105,
         "school": "浙大宁波理工学院",
         "team": "青梅绿茶",
         "solved": 2,
@@ -42671,7 +42671,7 @@
       },
       {
         "rank": 224,
-        "org_rank": null,
+        "org_rank": 106,
         "school": "成都信息工程大学",
         "team": "帝企鹅",
         "solved": 2,
@@ -42931,7 +42931,7 @@
       },
       {
         "rank": 226,
-        "org_rank": null,
+        "org_rank": 107,
         "school": "绍兴文理学院元培学院",
         "team": "场场打铜的杂鱼大哥哥",
         "solved": 2,
@@ -43487,7 +43487,7 @@
       },
       {
         "rank": 229,
-        "org_rank": null,
+        "org_rank": 108,
         "school": "浙江机电职业技术大学",
         "team": "兔八鸽",
         "solved": 2,
@@ -43714,7 +43714,7 @@
       },
       {
         "rank": 231,
-        "org_rank": null,
+        "org_rank": 109,
         "school": "中国矿业大学（北京）",
         "team": "守村人",
         "solved": 2,
@@ -44510,7 +44510,7 @@
       },
       {
         "rank": 236,
-        "org_rank": null,
+        "org_rank": 110,
         "school": "中国地质大学（武汉）",
         "team": "不可思议之国的爱丽丝正在梦游仙境",
         "solved": 2,
@@ -44803,7 +44803,7 @@
       },
       {
         "rank": 238,
-        "org_rank": null,
+        "org_rank": 111,
         "school": "西南科技 大学",
         "team": "此生仅有的机会",
         "solved": 2,
@@ -45038,7 +45038,7 @@
       },
       {
         "rank": 239,
-        "org_rank": null,
+        "org_rank": 112,
         "school": "中国石油大学（华东）",
         "team": "中石大2005",
         "solved": 2,
@@ -45161,7 +45161,7 @@
       },
       {
         "rank": 241,
-        "org_rank": null,
+        "org_rank": 113,
         "school": "福建理工大学",
         "team": "猿农舟",
         "solved": 2,
@@ -45887,7 +45887,7 @@
       },
       {
         "rank": 245,
-        "org_rank": null,
+        "org_rank": 114,
         "school": "深圳大学",
         "team": "你头怎么尖尖的",
         "solved": 2,
@@ -46399,7 +46399,7 @@
       },
       {
         "rank": 249,
-        "org_rank": null,
+        "org_rank": 115,
         "school": "暨南大学",
         "team": "怎么你俩都不在机房",
         "solved": 2,
@@ -46511,7 +46511,7 @@
       },
       {
         "rank": 249,
-        "org_rank": null,
+        "org_rank": 115,
         "school": "香港浸会大学",
         "team": "霸道隊友：上一世成爲黑紅的我重回ICPC西安，這一次我全都要。",
         "solved": 2,
@@ -46980,7 +46980,7 @@
       },
       {
         "rank": 253,
-        "org_rank": null,
+        "org_rank": 117,
         "school": "阿坝师范学院",
         "team": "火攻",
         "solved": 2,
@@ -47072,7 +47072,7 @@
       },
       {
         "rank": 254,
-        "org_rank": null,
+        "org_rank": 118,
         "school": "南昌大学",
         "team": "雪月花",
         "solved": 2,
@@ -47207,7 +47207,7 @@
       },
       {
         "rank": 255,
-        "org_rank": null,
+        "org_rank": 119,
         "school": "广州大学",
         "team": "i * i = -1",
         "solved": 2,
@@ -47336,7 +47336,7 @@
       },
       {
         "rank": 256,
-        "org_rank": null,
+        "org_rank": 120,
         "school": "云南大学",
         "team": "华丽收场",
         "solved": 2,
@@ -47527,7 +47527,7 @@
       },
       {
         "rank": 258,
-        "org_rank": null,
+        "org_rank": 121,
         "school": "上海师范大学",
         "team": "你带着二次元头像说我是二次元？",
         "solved": 2,
@@ -47859,7 +47859,7 @@
       },
       {
         "rank": 260,
-        "org_rank": null,
+        "org_rank": 122,
         "school": "集美大学",
         "team": "因为暮色将终",
         "solved": 2,
@@ -48148,7 +48148,7 @@
       },
       {
         "rank": 262,
-        "org_rank": null,
+        "org_rank": 123,
         "school": "南阳理工学院",
         "team": "一哥一演一挂机",
         "solved": 2,
@@ -48916,7 +48916,7 @@
       },
       {
         "rank": 267,
-        "org_rank": null,
+        "org_rank": 124,
         "school": "东北师范大学",
         "team": "运行错误",
         "solved": 2,
@@ -49015,7 +49015,7 @@
       },
       {
         "rank": 268,
-        "org_rank": null,
+        "org_rank": 125,
         "school": "浙江工商大学",
         "team": "空花阳焰",
         "solved": 2,
@@ -49310,7 +49310,7 @@
       },
       {
         "rank": 270,
-        "org_rank": null,
+        "org_rank": 126,
         "school": "西安欧亚学院",
         "team": "略去过程QED",
         "solved": 2,
@@ -49457,7 +49457,7 @@
       },
       {
         "rank": 271,
-        "org_rank": null,
+        "org_rank": 127,
         "school": "中国矿业大学",
         "team": "MineGPT5.0",
         "solved": 2,
@@ -50108,7 +50108,7 @@
       },
       {
         "rank": 275,
-        "org_rank": null,
+        "org_rank": 128,
         "school": "河南理工大学",
         "team": "橙子往昔",
         "solved": 2,
@@ -50323,7 +50323,7 @@
       },
       {
         "rank": 277,
-        "org_rank": null,
+        "org_rank": 129,
         "school": "沈阳理工大学",
         "team": "不祈者",
         "solved": 1,

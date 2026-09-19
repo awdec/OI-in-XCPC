@@ -34,8 +34,8 @@ const playerPath = (name) => `/${props.year}/player/${encodeURIComponent(name)}`
     max-height="70vh"
     :row-class-name="rowMedalClass"
   >
-    <el-table-column prop="rank" label="排名" width="70" align="center" fixed />
-    <el-table-column prop="org_rank" label="校内" width="60" align="center" />
+    <el-table-column prop="rank" label="队排" width="70" align="center" fixed />
+    <el-table-column prop="org_rank" label="校排" width="60" align="center" />
 
     <el-table-column label="学校" min-width="160" show-overflow-tooltip>
       <template #default="{ row }">

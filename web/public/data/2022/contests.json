@@ -1,9 +1,9 @@
 [
   {
     "id": "final",
-    "name": "CCPC 总决赛",
+    "name": "CCPC 广州（总决赛）",
     "org": "CCPC",
-    "city": "总决赛",
+    "city": "广州",
     "teams": 129,
     "champion": {
       "school": "北京大学",
@@ -49,6 +49,32 @@
       "team": "摆烂人",
       "solved": 10,
       "penalty": 1511
+    }
+  },
+  {
+    "id": "weihai",
+    "name": "CCPC 威海",
+    "org": "CCPC",
+    "city": "威海",
+    "teams": 240,
+    "champion": {
+      "school": "北京大学",
+      "team": "重生之我是菜狗",
+      "solved": 12,
+      "penalty": 1259
+    }
+  },
+  {
+    "id": "shanghai",
+    "name": "ICPC 上海",
+    "org": "ICPC",
+    "city": "上海",
+    "teams": 280,
+    "champion": {
+      "school": "北京大学",
+      "team": "重生之我是菜狗",
+      "solved": 11,
+      "penalty": 1861
     }
   },
   {

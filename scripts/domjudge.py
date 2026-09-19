@@ -25,6 +25,16 @@ MEDAL_MAP = {
     "铜奖": "Bronze", "铜牌": "Bronze",
     "优胜奖": "Honorable",
     "冠军": "Winner",
+    # algoUX 榜单导出的英文奖牌标注
+    "Gold Award": "Gold",
+    "Silver Award": "Silver",
+    "Bronze Award": "Bronze",
+    "Honorable Mention": "Honorable",
+    "Champion": "Winner",
+    # ICPC 榜单导出的英文奖牌标注（如 2020 CCPC 北京、2022 ICPC 上海）
+    "Gold Medalist": "Gold",
+    "Silver Medalist": "Silver",
+    "Bronze Medalist": "Bronze",
 }
 
 SOLVED_TOKENS = {"AC", "FB", "OK", "SV"}
@@ -83,6 +93,16 @@ def _minutes(raw):
         return 0
 
 
+def _optional_int(raw):
+    """'9' → 9；NaN / '*' 等非数字 → None。"""
+    if pd.isna(raw):
+        return None
+    try:
+        return int(float(str(raw).strip()))
+    except ValueError:
+        return None
+
+
 def parse_submission(raw):
     """
     解析 DOMjudge 提交记录为项目提交结构。
@@ -116,6 +136,24 @@ def parse_rank_medal(raw):
     return rank, medal
 
 
+def _medal_from_row(row, col_idxs):
+    """从若干排名列中提取第一个可识别的奖牌标注。
+
+    常规榜的奖牌在 '# ' 列；CCPC 总决赛榜（2024 广州）无 '# ' 列，
+    奖牌标注在本科/专科分组排名列 本科# / 专科# 上，R# 只是纯数字总排名。
+    """
+    for i in col_idxs:
+        raw = row.iloc[i]
+        if pd.isna(raw):
+            continue
+        m = re.search(r"[（(](.+?)[）)]", str(raw))
+        if m:
+            medal = MEDAL_MAP.get(m.group(1).strip())
+            if medal:
+                return medal
+    return None
+
+
 def _split_members(raw):
     if pd.isna(raw):
         return []
@@ -125,14 +163,21 @@ def _split_members(raw):
 def read_domjudge_teams(xlsx_path, sheet_name, problem_letters=PROBLEM_LETTERS):
     """
     读取 DOMjudge 榜单的一个 sheet（名称由 domjudge_sheet_name 探测），返回与"正式队伍"
-    原始行等价的中间结构列表: { rank, medal, school, team, members[], solved, penalty, problems }
+    原始行等价的中间结构列表: { rank, org_rank, medal, school, team, members[], coaches[],
+    solved, penalty, problems }。
+    CCPC 总决赛报名单把教练跟在 3 名队员之后（如 2024 广州），超出 3 人的部分归入 coaches。
     """
     df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=None)
     cols, problem_cols = _header_map(df)
     missing = [c for c in DOMJUDGE_REQUIRED_COLS if c not in cols]
     if missing:
         raise ValueError(f"{xlsx_path} 的 sheet '{sheet_name}' 缺少必需列: {', '.join(missing)}")
-    rank_col = cols.get("#", 0)
+    # 排名列: 常规榜用 '# '（官方排名，含奖牌标注）；总决赛榜无 '# '，退回 R#（含专科队的总排名）
+    rank_col = cols["#"] if "#" in cols else cols.get("R#", 0)
+    # 奖牌可能在 '# ' 或分组排名列（本科# / 专科#）上
+    medal_cols = [cols[c] for c in ("#", "本科#", "专科#") if c in cols]
+    # S# 列 = 学校排名（UniqByUserField(organization)），仅学校首队有值，NaN 表示非首队
+    org_rank_col = cols.get("S#")
     school_col = cols["Organization"]
     team_col = cols["Name"]
     members_col = cols["Team Members"]
@@ -154,26 +199,42 @@ def read_domjudge_teams(xlsx_path, sheet_name, problem_letters=PROBLEM_LETTERS):
 
         solved = row.iloc[solved_col]
         penalty = row.iloc[penalty_col]
-        rank, medal = parse_rank_medal(row.iloc[rank_col])
+        rank, _ = parse_rank_medal(row.iloc[rank_col])
+        medal = _medal_from_row(row, medal_cols)
+        members = _split_members(row.iloc[members_col])
         teams.append({
             "rank": rank,
+            "org_rank": _optional_int(row.iloc[org_rank_col]) if org_rank_col is not None else None,
             "medal": medal,
             "school": str(school).strip(),
             "team": str(row.iloc[team_col]).strip() if pd.notna(row.iloc[team_col]) else "",
-            "members": _split_members(row.iloc[members_col]),
+            "members": members[:3],
+            "coaches": members[3:],
             "solved": int(float(solved)) if pd.notna(solved) else 0,
             "penalty": _minutes(penalty) if pd.notna(penalty) else 0,
             "problems": problems,
         })
+
+    # 总决赛榜（2024 广州）无 '# ' 列，R# 是含打星队伍的完整榜排名，官方队序号有空洞；
+    # 按榜单行序以 (solved, penalty) 重算官方标准竞赛排名——该公式在带 '# ' 列的榜单上
+    # 与 '# ' 列完全一致（已对 2020 北京/2022 威海/2022 上海/2024 西安/2025 南阳验证）
+    if "#" not in cols:
+        last_key, last_rank = None, 0
+        for i, t in enumerate(teams):
+            key = (t["solved"], t["penalty"])
+            if key != last_key:
+                last_rank, last_key = i + 1, key
+            t["rank"] = last_rank
     return teams
 
 
 def read_domjudge_girl_teams(xlsx_path):
-    """从"女队" sheet 提取 (学校, 队名) 集合，用于给对应队伍打 girl 标记。"""
+    """从"女队"/"Female" sheet 提取 (学校, 队名) 集合，用于给对应队伍打 girl 标记。"""
     xls = pd.ExcelFile(xlsx_path)
-    if "女队" not in xls.sheet_names:
+    girl_sheet = next((n for n in ("女队", "Female") if n in xls.sheet_names), None)
+    if girl_sheet is None:
         return set()
-    df = pd.read_excel(xls, sheet_name="女队", header=None)
+    df = pd.read_excel(xls, sheet_name=girl_sheet, header=None)
     cols, _ = _header_map(df)
     school_col = cols.get("Organization")
     team_col = cols.get("Name")

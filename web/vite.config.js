@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/OI-in-XCPC/',
   plugins: [vue(), tailwindcss()],
   server: {
-    port: 5173,
+    port: 11451,
     host: false,
   },
 })
